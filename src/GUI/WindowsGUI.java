@@ -28,7 +28,7 @@ public class WindowsGUI extends JFrame {
         gbc.weightx=0.1;
         gbc.ipady=600;
         gbc.ipadx=150;
-        addJpanel(listGUI,0,0,1,1);
+        addJpanel(listGUI,0,0,1,2);
         gbc.ipadx=850;
         gbc.weightx=1;
         addJpanel(artsGUI,0,1,1,1);
@@ -39,7 +39,7 @@ public class WindowsGUI extends JFrame {
         gbc.ipady=0;
         gbc.weightx=1;
         gbc.weighty=0;
-        addJpanel(playerGUI,1,0,3,1);
+        addJpanel(playerGUI,1,1,2,1);
         pack();
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
