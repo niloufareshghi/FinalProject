@@ -16,8 +16,8 @@ public class ArtWorkGUI extends JPanel {
     JLabel artYear = new JLabel();
     JLabel artArtist = new JLabel();
     JLabel artAlbum = new JLabel();
-    Font font1 = new Font("a", Font.BOLD, 12);
-    Font font2 = new Font("a", Font.ITALIC, 12);
+    Font font1 = new Font("a", Font.BOLD, 10);
+    Font font2 = new Font("a", Font.ITALIC, 10);
 
     public ArtWorkGUI(SongInfo songInfo) {
 //        this.songInfo = songInfo;
@@ -41,7 +41,9 @@ public class ArtWorkGUI extends JPanel {
         songInfoP.add(artYear);
         songInfoP.setLayout(new BoxLayout(songInfoP, BoxLayout.Y_AXIS));
         setLayout(new BorderLayout());
+//        songInfoP.setPreferredSize(new Dimension(50,50));
         add(songInfoP, BorderLayout.PAGE_END);
+
     }
 
     @Override
@@ -56,7 +58,7 @@ public class ArtWorkGUI extends JPanel {
     private void setJlabel(JLabel jlabel, String jlabelStr, String title) {
         jlabel.setBackground(this.getBackground());
         jlabel.setForeground(new Color(0xF80300));
-        jlabel.setSize(100, 10);
+        jlabel.setSize(10, 10);
         if (jlabelStr != null) {
             jlabel.setFont(font2);
             jlabel.setText(title.toUpperCase() + ": " + jlabelStr);
