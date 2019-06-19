@@ -30,6 +30,7 @@ public class ArtWorkGUI extends JPanel {
         img = this.songInfo.getArtwork();
         setBackground(Color.black);
         setJlabel(artTitle, songInfo.getInfo()[0], "Title ");
+
         setJlabel(artArtist, songInfo.getInfo()[1], "Artist");
         setJlabel(artAlbum, songInfo.getInfo()[2], "Album  ");
         setJlabel(artYear, songInfo.getInfo()[3], "Year ");
