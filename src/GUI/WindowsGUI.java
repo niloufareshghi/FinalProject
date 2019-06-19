@@ -32,8 +32,9 @@ public class WindowsGUI extends JFrame {
         gbc.weightx=0.1;
         gbc.ipady=600;
         addJpanel(listGUI,0,0,1,2);
-        gbc.ipadx=850;
+        gbc.ipadx=0;
         gbc.weightx=1;
+        //here we changedchance
         addJpanel(artsGUI,0,1,1,1);
         gbc.ipadx=200;
         gbc.weightx=0;
