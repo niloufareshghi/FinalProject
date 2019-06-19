@@ -1,7 +1,12 @@
 package GUI;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class WindowsGUI extends JFrame {
 
@@ -10,7 +15,7 @@ public class WindowsGUI extends JFrame {
     CenterGUI artsGUI=new CenterGUI();
     PlayerGUI playerGUI=new PlayerGUI();
     GridBagConstraints gbc=new GridBagConstraints();
-    public WindowsGUI(){
+    public WindowsGUI() throws InvalidDataException, IOException, UnsupportedTagException, UnsupportedAudioFileException {
         designLayout();
 
     }
