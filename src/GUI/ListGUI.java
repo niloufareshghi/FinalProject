@@ -34,6 +34,6 @@ public class ListGUI extends JPanel {
         gbc.gridheight= 1;
         JPanel artWork =new JPanel();
         artWork.setBackground(Color.BLUE);
-        add(new ArtWorkGUI(new SongInfo("C:/Heydar/java/Ap/testing/out/production/testing/Lams.mp3")),gbc);
+        add(new ArtWorkGUI(new SongInfo("C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\Bodo Dire.mp3")),gbc);
     }
 }
