@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeListener;
 
 public class PListGUI extends JPanel implements ActionListener {
     private Font headFont = new Font("head", Font.BOLD, 20);
@@ -148,7 +149,44 @@ public class PListGUI extends JPanel implements ActionListener {
         PLButton.setIcon(new ImageIcon(getClass().getResource("plists.png")));
         PLButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         setButtonsShape(PLButton);
+        PLButton.addActionListener(new Action() {
+            @Override
+            public Object getValue(String key) {
+                return null;
+            }
+
+            @Override
+            public void putValue(String key, Object value) {
+
+            }
+
+            @Override
+            public void setEnabled(boolean b) {
+
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return false;
+            }
+
+            @Override
+            public void addPropertyChangeListener(PropertyChangeListener listener) {
+
+            }
+
+            @Override
+            public void removePropertyChangeListener(PropertyChangeListener listener) {
+
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
         PLPanel.add(PLButton);
+
     }
 }
 
