@@ -21,15 +21,14 @@ public class ListGUI extends JPanel {
         gbc.gridheight= 1;
         gbc.gridy = 0;
         gbc.gridx = 0;
-        JPanel j=new JPanel();
-        j.setBackground(new Color(0xC9000B));
-        add(j,gbc);
+        add(new PListGUI(),gbc);
         gbc.fill=GridBagConstraints.BOTH;
         gbc.gridy =1;
         gbc.gridx = 0;
         gbc.weighty=1;
         gbc.weightx=1;
         gbc.ipady=0;
+        gbc.ipadx=0;
         gbc.gridheight=1;
         gbc.gridheight= 1;
         JPanel artWork =new JPanel();
