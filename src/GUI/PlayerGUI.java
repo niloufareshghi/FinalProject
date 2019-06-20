@@ -27,6 +27,7 @@ public class PlayerGUI extends JPanel implements ActionListener{
     Timer timerP;
     Timer timerR;
     int lastPosition;
+    int counting =0 ;
 
 
 
@@ -83,6 +84,7 @@ public class PlayerGUI extends JPanel implements ActionListener{
         c.gridwidth=0;
         this.add(labelDuration,c);
 
+
         labelTimeCounter = new JLabel("00:00");
         c.weightx=1;
         c.weighty=1;
@@ -115,7 +117,9 @@ public class PlayerGUI extends JPanel implements ActionListener{
             e.printStackTrace();
         }
 
-
+        prog.setMinimum(0);
+        prog.setValue(0);
+        prog.setMaximum((int) player.getMp3file().getLengthInSeconds());
 
         timerP = new Timer(1000, new ActionListener() {
             @Override
@@ -126,6 +130,12 @@ public class PlayerGUI extends JPanel implements ActionListener{
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(player.getPosition())))
                 );
 
+                prog.setValue(counting);
+                counting++;
+                if(prog.getValue() == prog.getMaximum()){
+                    labelTimeCounter.setText("00:00");
+                    playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
+                }
             }
         });
 
@@ -138,10 +148,25 @@ public class PlayerGUI extends JPanel implements ActionListener{
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(lastPosition + player.getPosition())))
                 );
 
+
+                prog.setValue(counting);
+                counting++;
+                if(prog.getValue() == prog.getMaximum()){
+                    labelTimeCounter.setText("00:00");
+                    playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
+
+                }
+
+
             }
         });
 
-    }
+        labelDuration.setText(player.getLengthString());
+
+
+
+
+   }
 
     int i=0;
     @Override
@@ -152,7 +177,8 @@ public class PlayerGUI extends JPanel implements ActionListener{
                 player.play();
                 timerP.start();
                 timerP.setInitialDelay(0);
-                }else if(player.isPlaying() == false && i==1){
+
+            }else if(player.isPlaying() == false && i==1){
                 player.resumeSong();
 
                 timerR.setInitialDelay(0);
