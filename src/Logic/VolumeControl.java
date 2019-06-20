@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class VolumeControl{
     Runtime rt;
-    private String pathToNircmdexe = "C:\\Users\\Niloufar Eshghi\\Desktop\\nircmd.exe";
+    private String pathToNircmdexe = "C:\\Users\\Niloufar Eshghi\\IdeaProjects\\FinalProject\\src\\nircmd.exe";
     Process pr;
 
     public VolumeControl() throws IOException {

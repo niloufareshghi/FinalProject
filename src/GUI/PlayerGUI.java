@@ -204,10 +204,7 @@ public class PlayerGUI extends JPanel implements ActionListener{
                 timerR.setInitialDelay(0);
                 timerR.start();
             }
-//            if (!playing){
-//                pt = new PlayerThread();
-//                pt.start();
-//            }
+
             pOp=false;
         }
         else if(e.getSource()==playBtn) {
