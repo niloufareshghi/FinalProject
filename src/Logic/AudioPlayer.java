@@ -1,5 +1,8 @@
 package Logic;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
@@ -10,6 +13,7 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class AudioPlayer{
@@ -25,20 +29,21 @@ public class AudioPlayer{
     long pause;
     int totalLength;
     //AudioInputStream ais;
-    static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\Bodo Dire.mp3";
+    static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3";
     Player player;
-    AudioInputStream audioInputStream;
-    AudioFormat format;
-    long frames;
-    double duration; //milliSeconds
-    long audioFileLength;
-    float frameSize;
-    float frameRate;
+    Mp3File mp3file;
 
 
     public AudioPlayer() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
 
         myFile = new File(filepath);
+        try {
+            mp3file = new Mp3File(myFile);
+        } catch (UnsupportedTagException e) {
+            e.printStackTrace();
+        } catch (InvalidDataException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -49,20 +54,20 @@ public class AudioPlayer{
             return false;
     }
 
-    public boolean isComplete(){
-        if(player.isComplete()) return true;
-        else return false;
+    public Mp3File getMp3file(){
+        return mp3file;
     }
 
+    public String getLengthString(){
+        return (String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(mp3file.getLengthInMilliseconds()),
+                TimeUnit.MILLISECONDS.toSeconds(mp3file.getLengthInMilliseconds()) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mp3file.getLengthInMilliseconds()))));
+    }
 
     public int getPosition(){
         return player.getPosition();
     }
-/*
-    public int getTotalLength(){
-        return totalLength;
-    }
-*/
 
 
     Runnable runnablePlay=new Runnable() {
@@ -140,7 +145,8 @@ public class AudioPlayer{
 
         System.out.println(pause);
         System.out.println(totalLength);
-        System.out.println(duration);
+        System.out.println(mp3file.getLengthInMilliseconds());
+
 
     }
 
