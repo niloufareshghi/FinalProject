@@ -5,8 +5,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class UpSettingGUI extends JPanel {
-    public UpSettingGUI() {
+public class SearchBarGUI extends JPanel {
+    public SearchBarGUI() {
         setBackground(new Color(0x01000A));
         FlowLayout flowLayout =new FlowLayout(FlowLayout.LEFT);
         JTextField searchText=new JTextField("search...");

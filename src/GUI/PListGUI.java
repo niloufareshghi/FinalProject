@@ -41,7 +41,7 @@ public class PListGUI extends JPanel implements ActionListener {
         header.setBackground(Color.black);
         FlowLayout fLayout = new FlowLayout(FlowLayout.LEFT);
         header.setLayout(fLayout);
-        JLabel jpotify = new JLabel("jpotify                      ");
+        JLabel jpotify = new JLabel("jpotify        ");
         jpotify.setFont(headFont);
         jpotify.setIcon(new ImageIcon(getClass().getResource("jpotify.png")));
         jpotify.setForeground(Color.WHITE);

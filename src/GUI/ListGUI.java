@@ -33,6 +33,6 @@ public class ListGUI extends JPanel {
         gbc.gridheight= 1;
         JPanel artWork =new JPanel();
         artWork.setBackground(Color.BLUE);
-        add(new ArtWorkGUI(new SongInfo("C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\Bodo Dire.mp3")),gbc);
+        add(new ArtWorkGUI(new SongInfo("C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3")),gbc);
     }
 }

@@ -29,17 +29,17 @@ public class WindowsGUI extends JFrame {
     private void designLayout(){
         setLayout(new GridBagLayout());
         gbc.fill=GridBagConstraints.BOTH;
-        gbc.weighty=1;
-        gbc.weightx=0.1;
-        gbc.ipady=600;
-        gbc.ipadx=150;
-        addJpanel(listGUI,0,0,1,2);
-        gbc.ipadx=0;
+        gbc.weighty=0.5;
         gbc.weightx=1;
+        gbc.ipady=600;
+        gbc.ipadx=0;
+        addJpanel(listGUI,0,0,1,2);
+        gbc.ipadx=50;
+        gbc.weightx=2;
         //here we changedchance
         addJpanel(artsGUI,0,1,1,1);
-        gbc.ipadx=200;
-        gbc.weightx=0;
+        gbc.ipadx=100;
+        gbc.weightx=0.5;
         addJpanel(friendsActivityGUI,0,2,1,1);
         gbc.fill=GridBagConstraints.HORIZONTAL;
         gbc.ipady=0;
