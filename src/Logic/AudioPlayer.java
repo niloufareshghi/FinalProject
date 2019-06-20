@@ -34,7 +34,7 @@ public class AudioPlayer{
     Mp3File mp3file;
 
 
-    public AudioPlayer() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+    public AudioPlayer() throws IOException{
 
         myFile = new File(filepath);
         try {
@@ -44,6 +44,7 @@ public class AudioPlayer{
         } catch (InvalidDataException e) {
             e.printStackTrace();
         }
+
 
     }
 
