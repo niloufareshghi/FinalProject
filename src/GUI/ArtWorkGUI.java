@@ -29,11 +29,11 @@ public class ArtWorkGUI extends JPanel {
         this.songInfo = songInfo;
         img = this.songInfo.getArtwork();
         setBackground(Color.black);
-        setJlabel(artTitle, songInfo.getInfo()[0], "Title ");
+        setJlabel(artTitle, songInfo.getTitle(), "Title ");
 
-        setJlabel(artArtist, songInfo.getInfo()[1], "Artist");
-        setJlabel(artAlbum, songInfo.getInfo()[2], "Album  ");
-        setJlabel(artYear, songInfo.getInfo()[3], "Year ");
+        setJlabel(artArtist, songInfo.getArtist(), "Artist");
+        setJlabel(artAlbum, songInfo.getAlbum(), "Album  ");
+        setJlabel(artYear, songInfo.getYear(), "Year ");
         JPanel songInfoP = new JPanel();
         songInfoP.setBackground(this.getBackground());
         songInfoP.add(artAlbum);

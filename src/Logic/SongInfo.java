@@ -67,9 +67,21 @@ public class SongInfo {
 
 
     }
-
+@Deprecated
     public String[] getInfo() {
         return info;
+    }
+    public String getTitle(){
+        return info[0];
+    }
+    public String getArtist(){
+        return info[1];
+    }
+    public String getAlbum(){
+        return info[2];
+    }
+    public String getYear(){
+        return info[3];
     }
 
     public BufferedImage getArtwork() {
