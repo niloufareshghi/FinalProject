@@ -1,6 +1,8 @@
 package GUI;
 
 import Logic.AudioPlayer;
+import Logic.VolumeControl;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +12,8 @@ import java.util.concurrent.TimeUnit;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class PlayerGUI extends JPanel implements ActionListener{
     JButton playBtn;
@@ -19,14 +22,18 @@ public class PlayerGUI extends JPanel implements ActionListener{
     JFrame f;
     JProgressBar prog;
     JButton pauseBtn;
-    JSlider slider;
+    JSlider playSlider;
+    JSlider volumeSlider;
     private JLabel labelTimeCounter;
     private JLabel labelDuration = new JLabel("00:00:00");
+    private JLabel label;
     AudioPlayer player;
     boolean pOp=true;
     Timer timerP;
     Timer timerR;
     int lastPosition;
+    int counting =0 ;
+    VolumeControl controller;
 
 
 
@@ -83,6 +90,7 @@ public class PlayerGUI extends JPanel implements ActionListener{
         c.gridwidth=0;
         this.add(labelDuration,c);
 
+
         labelTimeCounter = new JLabel("00:00");
         c.weightx=1;
         c.weighty=1;
@@ -92,8 +100,31 @@ public class PlayerGUI extends JPanel implements ActionListener{
         c.gridwidth=0;
         this.add(labelTimeCounter,c);
 
+        volumeSlider = new JSlider();
+        volumeSlider.setMinimum(1);
+        volumeSlider.setMaximum(100);
+        volumeSlider.setValue(0);
+        controller = new VolumeControl();
+        volumeSlider.setValue(50);
+        controller.setSystemVolume(50);
+        volumeSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                controller.setSystemVolume(volumeSlider.getValue());
+            }
+        });
 
-        slider = new JSlider();
+        c.weightx=1;
+        c.weighty=1;
+        c.gridx=150;
+        c.insets = new Insets(0,50,0,0);
+        c.gridy=1;
+        c.gridwidth=0;
+        this.add(volumeSlider,c);
+
+
+
+        playSlider = new JSlider();
         prog = new JProgressBar(0,100);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx =1;
@@ -106,16 +137,14 @@ public class PlayerGUI extends JPanel implements ActionListener{
         prog.setValue(0);
         prog.setStringPainted(true);
         this.add(prog,c);
-        prog.setModel(slider.getModel());
-        this.add(slider,c);
+        prog.setModel(playSlider.getModel());
+        this.add(playSlider,c);
 
-        try {
-            player =  new AudioPlayer();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
+        player =  new AudioPlayer();
 
-
+        prog.setMinimum(0);
+        prog.setValue(0);
+        prog.setMaximum((int) player.getMp3file().getLengthInSeconds());
 
         timerP = new Timer(1000, new ActionListener() {
             @Override
@@ -125,7 +154,13 @@ public class PlayerGUI extends JPanel implements ActionListener{
                         TimeUnit.MILLISECONDS.toSeconds(player.getPosition()) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(player.getPosition())))
                 );
-
+                prog.setValue(counting);
+                counting++;
+                if(prog.getValue() == prog.getMaximum()){
+                    labelTimeCounter.setText("00:00");
+                    playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
+                    pOp = true;
+                }
             }
         });
 
@@ -137,11 +172,22 @@ public class PlayerGUI extends JPanel implements ActionListener{
                         TimeUnit.MILLISECONDS.toSeconds(lastPosition+player.getPosition())-
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(lastPosition + player.getPosition())))
                 );
+                prog.setValue(counting);
+                counting++;
+                if(prog.getValue() == prog.getMaximum()){
+                    labelTimeCounter.setText("00:00");
+                    playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
+                    pOp = true;
 
+                }
             }
         });
 
-    }
+        labelDuration.setText(player.getLengthString());
+
+
+
+   }
 
     int i=0;
     @Override
@@ -152,16 +198,13 @@ public class PlayerGUI extends JPanel implements ActionListener{
                 player.play();
                 timerP.start();
                 timerP.setInitialDelay(0);
-                }else if(player.isPlaying() == false && i==1){
-                player.resumeSong();
 
+            }else if(player.isPlaying() == false && i==1){
+                player.resumeSong();
                 timerR.setInitialDelay(0);
                 timerR.start();
             }
-//            if (!playing){
-//                pt = new PlayerThread();
-//                pt.start();
-//            }
+
             pOp=false;
         }
         else if(e.getSource()==playBtn) {
@@ -179,6 +222,7 @@ public class PlayerGUI extends JPanel implements ActionListener{
             pOp=true;
         }
     }
+
 
 
     private void showButton(JButton b) {
