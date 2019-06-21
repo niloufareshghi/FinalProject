@@ -29,7 +29,7 @@ public class AudioPlayer{
     long pause;
     int totalLength;
     //AudioInputStream ais;
-    static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3";
+    static String filepath = "C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3";
     Player player;
     Mp3File mp3file;
 
@@ -64,6 +64,10 @@ public class AudioPlayer{
                 TimeUnit.MILLISECONDS.toMinutes(mp3file.getLengthInMilliseconds()),
                 TimeUnit.MILLISECONDS.toSeconds(mp3file.getLengthInMilliseconds()) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mp3file.getLengthInMilliseconds()))));
+    }
+    public long getmp3Long(){
+        return mp3file.getLengthInMilliseconds();
+
     }
 
     public int getPosition(){
@@ -100,7 +104,7 @@ public class AudioPlayer{
                 fileInputStream=new FileInputStream(myFile);
                 bufferedInputStream=new BufferedInputStream(fileInputStream);
                 player=new Player(bufferedInputStream);
-                fileInputStream.skip(totalLength - pause);
+                fileInputStream.skip(totalLength -pause);
                 player.play(/*pausedOnFrame, Integer.MAX_VALUE*/);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -148,6 +152,11 @@ public class AudioPlayer{
         System.out.println(totalLength);
         System.out.println(mp3file.getLengthInMilliseconds());
 
+
+    }
+    public void changeByTime(int sliderValue,int max) throws IOException {
+
+            pause=(int)((max-sliderValue)*totalLength/max);
 
     }
 

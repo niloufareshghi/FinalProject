@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -34,7 +33,6 @@ public class PlayerGUI extends JPanel implements ActionListener{
     int lastPosition;
     int counting =0 ;
     VolumeControl controller;
-
 
 
 
@@ -186,7 +184,7 @@ public class PlayerGUI extends JPanel implements ActionListener{
         labelDuration.setText(player.getLengthString());
 
 
-
+        handlePlayer();
    }
 
     int i=0;
@@ -232,6 +230,30 @@ public class PlayerGUI extends JPanel implements ActionListener{
         b.setOpaque(false);
         b.setSize(20,20);
 
+    }
+    private void handlePlayer(){
+        playSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+               if (playSlider.getValueIsAdjusting()) {
+                    System.out.println("changed");
+                    lastPosition+=player.getPosition()+player.getmp3Long()*(playSlider.getValue()/playSlider.getMaximum());
+                   if(player.isPlaying() == true){
+                       player.pause();
+                       timerR.stop();
+                       timerP.stop();
+                       try {
+                           player.changeByTime(playSlider.getValue(),playSlider.getMaximum());
+                       } catch (IOException e1) {
+                           e1.printStackTrace();
+                       }
+                       timerR.setInitialDelay(0);
+                       timerR.start();
+                       player.resumeSong();
+                   }
+               }
+            }
+        });
     }
 
 }
