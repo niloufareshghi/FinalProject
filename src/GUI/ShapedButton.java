@@ -13,6 +13,7 @@ public class ShapedButton extends JPanel {
     Image img;
 
     public ShapedButton() {
+        setPreferredSize(new Dimension(200,200));
         setLayout(new BorderLayout());
         setPlayShape();
         setPlayAction();
