@@ -17,7 +17,7 @@ public class SearchBarGUI extends JPanel {
         searchText.setPreferredSize(new Dimension(200,30));
         add(searchText);
         JButton searchButton =new JButton();
-        searchButton.setIcon(new ImageIcon(getClass().getResource("loupe.png")));
+        //searchButton.setIcon(new ImageIcon(getClass().getResource("loupe.png")));
         searchButton.setFocusPainted(false);
         searchButton.setBorderPainted(false);
         searchButton.setContentAreaFilled(false);
