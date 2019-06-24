@@ -1,8 +1,10 @@
+
 package Logic;
 
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
@@ -30,7 +32,7 @@ public class AudioPlayer{
     int totalLength;
     //AudioInputStream ais;
     static String filepath = "C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3";
-    Player player;
+    volatile Player player;
     Mp3File mp3file;
 
 
@@ -78,22 +80,22 @@ public class AudioPlayer{
     Runnable runnablePlay=new Runnable() {
         @Override
         public void run() {
-                try {
-                    //code for play button
-                    fileInputStream = new FileInputStream(myFile);
-                    bufferedInputStream = new BufferedInputStream(fileInputStream);
-                    player = new Player(bufferedInputStream);
-                    totalLength = fileInputStream.available();
-                    player.play();//starting music
-                    //if(player.isComplete()) player.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (JavaLayerException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                //code for play button
+                fileInputStream = new FileInputStream(myFile);
+                bufferedInputStream = new BufferedInputStream(fileInputStream);
+                player = new Player(bufferedInputStream);
+                totalLength = fileInputStream.available();
+                player.play();//starting music
+                //if(player.isComplete()) player.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (JavaLayerException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
     };
 
     Runnable runnableResume=new Runnable() {
@@ -117,7 +119,7 @@ public class AudioPlayer{
     };
 
 
-    public void play(){
+    synchronized public void play(){
         play = new Thread(runnablePlay);
         play.start();
         playing = true;
@@ -125,13 +127,13 @@ public class AudioPlayer{
     }
 
 
-    public void resumeSong(){
+    synchronized public void resumeSong(){
         resume = new Thread (runnableResume);
         resume.start();
         playing = true;
     }
 
-    public void pause() {
+    synchronized public void pause() {
             /*player.setPlayBackListener(new PlaybackListener() {
                 @Override
                 public void playbackFinished(PlaybackEvent event) {
@@ -145,8 +147,8 @@ public class AudioPlayer{
         }
 
         player.close();
-
-            playing = false;
+        resume=null;
+        playing = false;
 
         System.out.println(pause);
         System.out.println(totalLength);
@@ -154,11 +156,8 @@ public class AudioPlayer{
 
 
     }
-    public void changeByTime(int sliderValue,int max) throws IOException {
-
-            pause=(int)((max-sliderValue)*totalLength/max);
+    synchronized public void changeByTime(int sliderValue,int max) throws IOException {
+        pause = (int) ((max - sliderValue) * totalLength / max);
 
     }
-
-
 }

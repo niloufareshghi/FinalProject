@@ -1,5 +1,6 @@
 package GUI;
 
+import Controller.Controller;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
@@ -15,8 +16,11 @@ public class WindowsGUI extends JFrame {
     CenterGUI artsGUI=new CenterGUI();
     PlayerGUI playerGUI=new PlayerGUI();
     GridBagConstraints gbc=new GridBagConstraints();
+
     public WindowsGUI() throws InvalidDataException, IOException, UnsupportedTagException, UnsupportedAudioFileException {
+        Controller.setWindowsGUI(this);
         designLayout();
+
 
     }
     private void addJpanel(Component component,int gridy,int gridx,int width,int height){
@@ -38,7 +42,7 @@ public class WindowsGUI extends JFrame {
         gbc.weightx=2;
         //here we changedchance
         addJpanel(artsGUI,0,1,1,1);
-        gbc.ipadx=100;
+//        gbc.ipadx=100;
         gbc.weightx=0.5;
         addJpanel(friendsActivityGUI,0,2,1,1);
         gbc.fill=GridBagConstraints.HORIZONTAL;
@@ -46,8 +50,26 @@ public class WindowsGUI extends JFrame {
         gbc.weightx=1;
         gbc.weighty=0;
         addJpanel(playerGUI,1,1,2,1);
-        pack();
+//        pack();
+        setSize(1000,1000);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
+
+    public FriendsActivityGUI getFriendsActivityGUI() {
+        return friendsActivityGUI;
+    }
+
+    public JPanel getListGUI() {
+        return listGUI;
+    }
+
+    public CenterGUI getArtsGUI() {
+        return artsGUI;
+    }
+
+    public PlayerGUI getPlayerGUI() {
+        return playerGUI;
+    }
+
 }

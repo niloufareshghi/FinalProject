@@ -1,5 +1,6 @@
 package GUI;
 
+
 import Logic.AudioPlayer;
 import Logic.VolumeControl;
 
@@ -185,7 +186,7 @@ public class PlayerGUI extends JPanel implements ActionListener{
 
 
         handlePlayer();
-   }
+    }
 
     int i=0;
     @Override
@@ -235,23 +236,24 @@ public class PlayerGUI extends JPanel implements ActionListener{
         playSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-               if (playSlider.getValueIsAdjusting()) {
+                if (playSlider.getValueIsAdjusting()) {
                     System.out.println("changed");
                     lastPosition+=player.getPosition()+player.getmp3Long()*(playSlider.getValue()/playSlider.getMaximum());
-                   if(player.isPlaying() == true){
-                       player.pause();
-                       timerR.stop();
-                       timerP.stop();
-                       try {
-                           player.changeByTime(playSlider.getValue(),playSlider.getMaximum());
-                       } catch (IOException e1) {
-                           e1.printStackTrace();
-                       }
-                       timerR.setInitialDelay(0);
-                       timerR.start();
-                       player.resumeSong();
-                   }
-               }
+                    if(player.isPlaying() == true){
+                        prog.setValue(playSlider.getValue());
+                        player.pause();
+                        timerR.stop();
+                        timerP.stop();
+                        try {
+                            player.changeByTime(playSlider.getValue(),playSlider.getMaximum());
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        timerR.setInitialDelay(0);
+                        timerR.start();
+                        player.resumeSong();
+                    }
+                }
             }
         });
     }

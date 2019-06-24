@@ -1,0 +1,5 @@
+package GUI;
+
+public enum MainStatus {
+    SONGS,PLISTSONGS,ALBUMS,MOVIES,MUSICDETAIL,PLAYLISTS,ALBUMLIST;
+}

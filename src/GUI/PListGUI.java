@@ -1,5 +1,7 @@
 package GUI;
 
+import Controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -53,7 +55,7 @@ public class PListGUI extends JPanel implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridy = 1;
         gbc.gridx = 0;
-        gbc.weighty = 1;
+         gbc.weighty = 1;
         gbc.weightx = 1;
         gbc.gridheight = 1;
         gbc.gridheight = 1;
@@ -69,6 +71,12 @@ public class PListGUI extends JPanel implements ActionListener {
         BSong.setIcon(new ImageIcon(getClass().getResource("speaker.png")));
         BSong.setAlignmentX(Component.CENTER_ALIGNMENT);
         setButtonsShape(BSong);
+        BSong.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Controller.songsListButtonAction();
+            }
+        });
         libPanel.add(BSong);
         JButton BAlbums = new JButton("Albums");
         BAlbums.setIcon(new ImageIcon(getClass().getResource("Album.png")));
@@ -99,9 +107,7 @@ public class PListGUI extends JPanel implements ActionListener {
         playList.setFont(headFont);
         playList.setForeground(Color.RED);
         PLPanel.add(playList);
-        for(int i=0;i<50;i++){
-            addPListButton("Button "+i);
-        }
+
     }
 
     private void setButtonsShape(JButton jButton) {
