@@ -18,7 +18,7 @@ public class WindowsGUI extends JFrame {
     PlayerGUI playerGUI=new PlayerGUI();
     GridBagConstraints gbc=new GridBagConstraints();
 
-    public WindowsGUI() throws InvalidDataException, IOException, UnsupportedTagException, UnsupportedAudioFileException {
+    public WindowsGUI() throws InvalidDataException, IOException, UnsupportedTagException, UnsupportedAudioFileException, JavaLayerException {
         Controller.setWindowsGUI(this);
         designLayout();
 
