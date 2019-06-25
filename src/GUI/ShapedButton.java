@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 
 public class ShapedButton extends JPanel {
     JButton playButton = new JButton("PLAY");
@@ -74,9 +75,20 @@ public class ShapedButton extends JPanel {
         southButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                showSaveFileDialog();;
             }
         });
+    }
+
+    private void showSaveFileDialog() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save");
+
+        int userSelection = fileChooser.showSaveDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+        }
     }
     private void setPlayShape() {
         playButton.setIcon(new ImageIcon(getClass().getResource("Advanceplay.png")));

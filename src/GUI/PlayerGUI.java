@@ -1,16 +1,17 @@
 package GUI;
 
-
-import Logic.AudioPlayer;
+import Logic.PlayerThread;
 import Logic.VolumeControl;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
+import javazoom.jl.decoder.JavaLayerException;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -19,15 +20,11 @@ public class PlayerGUI extends JPanel implements ActionListener{
     JButton playBtn;
     JButton nextBtn;
     JButton prevBtn;
-    JFrame f;
-    JProgressBar prog;
-    JButton pauseBtn;
     JSlider playSlider;
     JSlider volumeSlider;
     private JLabel labelTimeCounter;
-    private JLabel labelDuration = new JLabel("00:00:00");
-    private JLabel label;
-    AudioPlayer player;
+    private JLabel labelDuration;
+    PlayerThread thread;
     boolean pOp=true;
     Timer timerP;
     Timer timerR;
@@ -38,11 +35,15 @@ public class PlayerGUI extends JPanel implements ActionListener{
 
 
 
-    public PlayerGUI() throws UnsupportedAudioFileException, IOException {
+    public PlayerGUI() throws IOException, JavaLayerException, InvalidDataException, UnsupportedTagException {
+
 
         GridBagConstraints c = new GridBagConstraints();
         setLayout(new GridBagLayout());
         setBackground(Color.ORANGE);
+
+        thread = new PlayerThread();
+
 
         prevBtn = new JButton();
         c.fill = GridBagConstraints.BOTH;
@@ -124,82 +125,81 @@ public class PlayerGUI extends JPanel implements ActionListener{
 
 
         playSlider = new JSlider();
-        prog = new JProgressBar(0,100);
+        playSlider.setMaximum((int) thread.getMp3().getLengthInSeconds());
+        playSlider.setValue(0);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx =1;
-        c.weighty=1;
+        c.weighty=2;
         c.gridwidth=50;
         c.gridx=1;
         c.gridy=1;
         c.insets=new Insets(0,50,0,0);
 
-        prog.setValue(0);
-        prog.setStringPainted(true);
-        this.add(prog,c);
-        prog.setModel(playSlider.getModel());
         this.add(playSlider,c);
 
-        player =  new AudioPlayer();
 
-        prog.setMinimum(0);
-        prog.setValue(0);
-        prog.setMaximum((int) player.getMp3file().getLengthInSeconds());
+
+
+
+
 
         timerP = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                labelTimeCounter.setText(String.format("%02d:%02d",
-                        TimeUnit.MILLISECONDS.toMinutes(player.getPosition()),
-                        TimeUnit.MILLISECONDS.toSeconds(player.getPosition()) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(player.getPosition())))
-                );
-                prog.setValue(counting);
+                playSlider.setValue(counting);
                 counting++;
-                if(prog.getValue() == prog.getMaximum()){
+                if(playSlider.getValue() == playSlider.getMaximum()){
+                    thread.pause();
                     labelTimeCounter.setText("00:00");
                     playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
                     pOp = true;
                 }
+
+                long minutes = (long) (((double)playSlider.getValue() ) / 60);
+                long seconds = (long) (((double)playSlider.getValue()) % 60);
+                labelTimeCounter.setText(String.format("%02d:%02d", minutes, seconds));
+
             }
+
         });
 
         timerR = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                labelTimeCounter.setText(String.format("%02d:%02d ",
-                        TimeUnit.MILLISECONDS.toMinutes(lastPosition+player.getPosition()),
-                        TimeUnit.MILLISECONDS.toSeconds(lastPosition+player.getPosition())-
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(lastPosition + player.getPosition())))
-                );
-                prog.setValue(counting);
+                playSlider.setValue(counting);
                 counting++;
-                if(prog.getValue() == prog.getMaximum()){
+                if(playSlider.getValue() == playSlider.getMaximum()){
+                    thread.pause();
                     labelTimeCounter.setText("00:00");
                     playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
                     pOp = true;
 
                 }
+                long minutes = (long) ((playSlider.getValue()) / 60);
+                long seconds = (long) ((playSlider.getValue()) % 60);
+                labelTimeCounter.setText(String.format("%02d:%02d", minutes, seconds));
             }
         });
 
-        labelDuration.setText(player.getLengthString());
+        labelDuration.setText(String.format("%02d:%02d", playSlider.getMaximum() / 60, playSlider.getMaximum()%60));
 
 
-        handlePlayer();
-    }
+
+   }
 
     int i=0;
     @Override
     public void actionPerformed(ActionEvent e) {
         if(pOp && e.getSource()==playBtn) {
             playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
-            if(player.isPlaying() == false && i==0){
-                player.play();
+            if(i==0) {
+                thread.start();
                 timerP.start();
                 timerP.setInitialDelay(0);
+            }
 
-            }else if(player.isPlaying() == false && i==1){
-                player.resumeSong();
+            if(thread.isPaused() && i==1){
+                thread.resumeSong();
                 timerR.setInitialDelay(0);
                 timerR.start();
             }
@@ -207,17 +207,11 @@ public class PlayerGUI extends JPanel implements ActionListener{
             pOp=false;
         }
         else if(e.getSource()==playBtn) {
-            lastPosition+=player.getPosition();
             playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
-            if(player.isPlaying() == true){
-                player.pause();
-                i=1;
+            thread.pause();
+            i=1;
                 timerP.stop();
                 timerR.stop();
-            }
-            /*
-            if (playing) stop();
-             */
             pOp=true;
         }
     }
@@ -231,31 +225,13 @@ public class PlayerGUI extends JPanel implements ActionListener{
         b.setOpaque(false);
         b.setSize(20,20);
 
-    }
-    private void handlePlayer(){
-        playSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (playSlider.getValueIsAdjusting()) {
-                    System.out.println("changed");
-                    lastPosition+=player.getPosition()+player.getmp3Long()*(playSlider.getValue()/playSlider.getMaximum());
-                    if(player.isPlaying() == true){
-                        prog.setValue(playSlider.getValue());
-                        player.pause();
-                        timerR.stop();
-                        timerP.stop();
-                        try {
-                            player.changeByTime(playSlider.getValue(),playSlider.getMaximum());
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                        timerR.setInitialDelay(0);
-                        timerR.start();
-                        player.resumeSong();
-                    }
-                }
-            }
-        });
+
     }
 
+
+
 }
+
+
+
+

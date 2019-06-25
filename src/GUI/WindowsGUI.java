@@ -3,6 +3,7 @@ package GUI;
 import Controller.Controller;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import javazoom.jl.decoder.JavaLayerException;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
