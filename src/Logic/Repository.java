@@ -13,6 +13,9 @@ public class Repository {
     public boolean addSong(SongInfo song) {
         if (song != null) {
             allSongs.add(song);
+            for(int i=0;i<allSongs.size();i++){
+                System.out.println("what is happening"+allSongs.get(i).getFilename());
+            }
             return true;
         }
         return false;
@@ -87,7 +90,7 @@ public class Repository {
     }
 
     public void removeSongFromPL(String name, SongInfo song) {
-
+        if(lists.contains(new PlayList(name)))
         lists.get(lists.indexOf(new PlayList(name))).removeSong(song);
     }
 

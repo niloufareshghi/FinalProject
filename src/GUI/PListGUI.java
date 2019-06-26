@@ -188,40 +188,10 @@ public class PListGUI extends JPanel implements ActionListener {
         PLButton.setIcon(new ImageIcon(getClass().getResource("plists.png")));
         PLButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         setButtonsShape(PLButton);
-        PLButton.addActionListener(new Action() {
-            @Override
-            public Object getValue(String key) {
-                return null;
-            }
-
-            @Override
-            public void putValue(String key, Object value) {
-
-            }
-
-            @Override
-            public void setEnabled(boolean b) {
-
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return false;
-            }
-
-            @Override
-            public void addPropertyChangeListener(PropertyChangeListener listener) {
-
-            }
-
-            @Override
-            public void removePropertyChangeListener(PropertyChangeListener listener) {
-
-            }
-
+        PLButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Controller.getWindowsGUI().getArtsGUI().getMainGUI().setSongsPlayList(playList);
             }
         });
         PLPanel.add(PLButton);

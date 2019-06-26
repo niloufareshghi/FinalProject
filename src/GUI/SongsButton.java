@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class SongsButton extends ShapedButton {
     String Title ;
@@ -56,7 +57,13 @@ public class SongsButton extends ShapedButton {
         PLButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                ArrayList<String> names = new ArrayList<>();
+                for(int i=0;i<Controller.getRepository().getLists().size();i++){
+                    names.add(Controller.getRepository().getLists().get(i).getName());
+                }
+                int choosed= (int) JOptionPane.showInputDialog( Controller.getWindowsGUI(),"Pick a printer", "Input", JOptionPane.QUESTION_MESSAGE,
+                        null, names.toArray(), "Titan");
+                System.out.println(choosed);
             }
         });
     }

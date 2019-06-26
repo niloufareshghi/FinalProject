@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ShapedButton extends JPanel {
     JButton playButton = new JButton("PLAY");
@@ -92,6 +93,9 @@ public class ShapedButton extends JPanel {
                 } catch (UnsupportedTagException e1) {
                     e1.printStackTrace();
                 }
+//                for(int i=0;i<Controller.getAllSongs().size();i++){
+//                    System.out.println(Controller.getAllSongs().get(i).);
+//                }
                 Controller.songsStatus();
             }
         });
@@ -103,9 +107,10 @@ public class ShapedButton extends JPanel {
 
         int userSelection = fileChooser.showSaveDialog(this);
         if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-            Controller.addSong(new SongInfo(fileToSave.getAbsolutePath()));
-            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+            File fileToSave =  fileChooser.getSelectedFile();
+            String path=new String();
+            path=fileToSave.getAbsolutePath();
+            Controller.addSong(new SongInfo(path));
         }
     }
 

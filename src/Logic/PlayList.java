@@ -35,7 +35,8 @@ public class PlayList {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof PlayList){
+        if (obj instanceof PlayList && obj!=null && ((PlayList) obj).name!=null){
+
             if(((PlayList) obj).name.equals(this.name)){
                 return true;
             }

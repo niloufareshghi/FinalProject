@@ -23,6 +23,7 @@ public class Save {
         this.allSongs = new ArrayList<>();
         for (int i = 0; i < allSongs.size(); i++) {
             this.allSongs.add(allSongs.get(i).getFilename());
+            System.out.println(allSongs.get(i).getFilename());
         }
     }
 
