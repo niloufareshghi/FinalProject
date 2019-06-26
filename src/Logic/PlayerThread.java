@@ -16,8 +16,12 @@ public class PlayerThread extends Thread {
     BufferedInputStream bufferedInputStream;
     File myFile;
     Mp3File mp3;
-    static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3";
+   //static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\11460851_11460513.mp3";
+   static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\06 Soghati.mp3";
     boolean isPaused;
+    int goalFrame;
+    int passedFrame;
+    int pausedPoint;
 
     public PlayerThread() throws JavaLayerException, IOException, InvalidDataException, UnsupportedTagException {
         myFile = new File(filepath);
@@ -25,6 +29,7 @@ public class PlayerThread extends Thread {
         player = new AdvancedPlayer(fileInputStream);
         isPaused = false;
         mp3 = new Mp3File(myFile);
+        goalFrame=-1;
     }
 
 
@@ -38,21 +43,44 @@ public class PlayerThread extends Thread {
            }
            try {
                player.play(1);
+               passedFrame++;
            } catch (JavaLayerException e) {
                e.printStackTrace();
            }
 
-           if(isPaused){
+           if(isPaused) {
                synchronized (player) {
-                   try {
-                       player.wait();
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
+                   if (goalFrame != -1) {
+                       try {
+                           player.close();
+                           passedFrame = goalFrame;
+                           myFile = new File(filepath);
+                           fileInputStream = new FileInputStream(myFile);
+                           player = new AdvancedPlayer(fileInputStream);
+                           player.play(goalFrame,goalFrame+1);
+                       } catch (JavaLayerException | FileNotFoundException e) {
+                           e.printStackTrace();
+                       }
+                       goalFrame=-1;
+                       isPaused=false;
+                       continue;
+
+                   }
+                   else{
+                       try {
+                           player.wait();
+                       } catch (InterruptedException e) {
+                           e.printStackTrace();
+                       }
                    }
                }
            }
 
        }
+    }
+
+    public int getPausedPoint(){
+        return pausedPoint;
     }
 
     public Mp3File getMp3(){
@@ -66,9 +94,11 @@ public class PlayerThread extends Thread {
         else return false;
     }
 
-    public void pause(){
+    public void pause() {
         this.isPaused = true;
+        pausedPoint = passedFrame;
     }
+
 
     public void resumeSong(){
         this.isPaused = false;
@@ -77,11 +107,7 @@ public class PlayerThread extends Thread {
         }
     }
 
-    public void seekTo(int frame) throws  javazoom.jl.decoder.JavaLayerException {
-        synchronized (player){
-            player.close();
-            player = new AdvancedPlayer(fileInputStream);
-            player.play(frame,frame+1);
-        }
+    public void seekTo(int frame) throws javazoom.jl.decoder.JavaLayerException, FileNotFoundException {
+        goalFrame=frame;
     }
 }
