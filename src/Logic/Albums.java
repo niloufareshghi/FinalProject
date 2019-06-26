@@ -5,7 +5,7 @@ public class Albums extends PlayList {
 
     public Albums(String name, String artist) {
         super(name);
-        artist = artist;
+        this.artist = artist;
     }
 
     public String getArtist() {

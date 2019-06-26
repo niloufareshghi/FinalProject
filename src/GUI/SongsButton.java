@@ -1,5 +1,6 @@
 package GUI;
 
+import Controller.Controller;
 import Logic.SongInfo;
 import org.omg.CORBA.BAD_INV_ORDER;
 
@@ -45,7 +46,7 @@ public class SongsButton extends ShapedButton {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Controller.deleteSong(songInfo);
             }
         });
     }

@@ -1,6 +1,7 @@
 package GUI;
 
 import Controller.Controller;
+import Logic.PlayList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,9 +27,8 @@ public class PListGUI extends JPanel implements ActionListener {
         setPLPanel();
         JScrollPane scrollPane =new JScrollPane(PLPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setPreferredSize(new Dimension(20,60));//vaghean kheily moheme
+        scrollPane.setPreferredSize(new Dimension(40,60));//vaghean kheily moheme
         add(scrollPane, gbc);
-        PLPanel.add(new JButton("BUtton  :"));
 
     }
 
@@ -74,7 +74,7 @@ public class PListGUI extends JPanel implements ActionListener {
         BSong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Controller.songsListButtonAction();
+                Controller.songsStatus();
             }
         });
         libPanel.add(BSong);
@@ -82,6 +82,12 @@ public class PListGUI extends JPanel implements ActionListener {
         BAlbums.setIcon(new ImageIcon(getClass().getResource("Album.png")));
         BAlbums.setAlignmentX(Component.CENTER_ALIGNMENT);
         setButtonsShape(BAlbums);
+        BAlbums.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Controller.albumsStatus();
+            }
+        });
         libPanel.add(BAlbums);
         JButton BMovies = new JButton("Movies");
         BMovies.setIcon(new ImageIcon(getClass().getResource("movie.png")));
@@ -100,14 +106,41 @@ public class PListGUI extends JPanel implements ActionListener {
         gbc.gridheight = 1;
         PLPanel.setBackground(Color.BLACK);
         PLPanel.setLayout(new BoxLayout(PLPanel,1));
-        JLabel playList = new JLabel("PLAYLIST           ");
+        JLabel playListLabel = new JLabel("PLAYLIST           ");
 
-        playList.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playList.setIcon(new ImageIcon(getClass().getResource("PL.png")));
-        playList.setFont(headFont);
-        playList.setForeground(Color.RED);
-        PLPanel.add(playList);
+        playListLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playListLabel.setIcon(new ImageIcon(getClass().getResource("PL.png")));
+        playListLabel.setFont(headFont);
+        playListLabel.setForeground(Color.RED);
+        PLPanel.add(playListLabel);
+        JButton addNewPL=new JButton("+Add New Playlist");
+        setButtonsShape(addNewPL);
+        addNewPL.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        addNewPL.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlayList playList =new PlayList("New PlayList");
 
+                for(int i =0; Controller.getRepository().getLists().contains(playList);i++) {
+                    System.out.println(playList.getName() + " != " );
+                    playList.setName("New PlayList(" + i + ")");
+                }
+//                SetPlayListName setPlayListName = new SetPlayListName(playList);
+                do {
+                    playList.setName(JOptionPane.showInputDialog("Enter Name of PlayList: ", playList.getName()));
+                }while ( Controller.getRepository().getLists().contains(playList));
+                Controller.getRepository().addNewPL(playList);
+                    addPListButton(playList);
+                updateUI();
+
+            }
+        });
+        PLPanel.add(addNewPL);
+        for(int i=0;i<Controller.getRepository().getLists().size();i++){
+            addPListButton(Controller.getRepository().getLists().get(i));
+        }
+//        addPListButton("favorites");
+//        addPListButton("sharedList");
     }
 
     private void setButtonsShape(JButton jButton) {
@@ -150,10 +183,10 @@ public class PListGUI extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
     }
-    private void addPListButton (String label){
-        JButton PLButton =new JButton(label);
+    private void addPListButton (PlayList playList){
+        JButton PLButton =new JButton(playList.getName());
         PLButton.setIcon(new ImageIcon(getClass().getResource("plists.png")));
-        PLButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        PLButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         setButtonsShape(PLButton);
         PLButton.addActionListener(new Action() {
             @Override

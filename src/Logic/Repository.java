@@ -3,7 +3,7 @@ package Logic;
 import java.util.ArrayList;
 
 public class Repository {
-    private ArrayList<SongInfo> allSongs = new ArrayList<>();
+    private ArrayList<SongInfo> allSongs = new ArrayList<SongInfo>();
     //    private HashMap<String, ArrayList> PLHashMap;
 //    private ArrayList<String> PLArrayList;
 //    private ArrayList<String> albumList = new ArrayList<>();
@@ -43,7 +43,7 @@ public class Repository {
         albums = new ArrayList<>();
 
         for (int i = 0; i < allSongs.size(); i++) {
-            Albums album = new Albums(allSongs.get(i).getTitle(), allSongs.get(i).getAlbum());
+            Albums album = new Albums(allSongs.get(i).getAlbum(), allSongs.get(i).getArtist());
             if (!albums.contains(album)) {
                 album.addSongs(allSongs.get(i));
                 albums.add(album);
@@ -62,11 +62,17 @@ public class Repository {
 
     public Albums getAlbum(Albums album) {
         albums = setAlbums();
-        int i = albums.indexOf(album);
-        return albums.get(i);
+        if(albums.contains(album)) {
+            int i = albums.indexOf(album);
+            return albums.get(i);
+        }
+        else {
+            return album;
+        }
+
     }
 
-    private void addNewPL(PlayList playList) {
+    public void addNewPL(PlayList playList) {
         if (!lists.contains(playList))
             lists.add(playList);
     }

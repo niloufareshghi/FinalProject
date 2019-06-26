@@ -67,24 +67,57 @@ public class SongInfo {
 
 
     }
-@Deprecated
+
+    @Deprecated
     public String[] getInfo() {
         return info;
     }
-    public String getTitle(){
-        return info[0];
+
+    public String getTitle() {
+        if (info[0] == null) {
+            return "UnKown";
+        } else
+            return info[0];
     }
-    public String getArtist(){
-        return info[1];
+
+    public String getArtist() {
+
+        if (info[1] == null) {
+            return "UnKown";
+        } else
+            return info[1];
     }
-    public String getAlbum(){
-        return info[2];
+
+    public String getAlbum() {
+        if (info[2] == null) {
+            return "UnKown";
+        } else {
+            return info[2];
+        }
     }
-    public String getYear(){
-        return info[3];
+
+    public String getYear() {
+        if (info[3] == null) {
+            return "UnKown";
+        } else
+            return info[3];
     }
 
     public BufferedImage getArtwork() {
         return img;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof SongInfo) {
+            if (filename.equals(((SongInfo) obj).getFilename())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

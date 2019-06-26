@@ -1,6 +1,7 @@
 package GUI;
 
 import Controller.Controller;
+import Logic.Load;
 import Logic.Repository;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
@@ -16,8 +17,7 @@ public class Test {
         // write your code here
         JFrame.setDefaultLookAndFeelDecorated(true);
         Controller.setRepository(new Repository());
-
+        Load load=new Load();
         WindowsGUI mainGUI =new WindowsGUI();
-
     }
 }

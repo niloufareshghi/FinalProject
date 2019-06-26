@@ -59,7 +59,7 @@ public class MainGUI extends JScrollPane {
         setList();
         status = MainStatus.ALBUMLIST;
         Hsize = 0;
-        addToList(new AlbumButton(null,album.getName()));
+        addToList(new AlbumButton(null,album.getName(),album.getArtist()));
         for (int i = 0; i < album.getSongs().size(); i++) {
             addToList(new SongsButton(album.getSongs().get(i)));
         }
@@ -69,7 +69,7 @@ public class MainGUI extends JScrollPane {
         status=MainStatus.ALBUMS;
         Hsize=0;
         for (int i = 0; i < albums.size(); i++) {
-            addToList(new AlbumButton(null,(albums.get(i).getName())));
+            addToList(new AlbumButton(null,albums.get(i).getName(),albums.get(i).getArtist()));
         }
     }
 
