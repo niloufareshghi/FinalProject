@@ -12,9 +12,12 @@ public class Repository {
 
     public boolean addSong(SongInfo song) {
         if (song != null) {
-            allSongs.add(song);
             for(int i=0;i<allSongs.size();i++){
                 System.out.println("what is happening"+allSongs.get(i).getFilename());
+        }
+            allSongs.add(song);
+            for(int i=0;i<allSongs.size();i++){
+                System.out.println("secen time "+allSongs.get(i).getFilename());
             }
             return true;
         }
@@ -86,6 +89,7 @@ public class Repository {
     }
 
     public void addSongToPL(String name, SongInfo song) {
+        if(!lists.get(lists.indexOf(new PlayList(name))).getSongs().contains(song))
         lists.get(lists.indexOf(new PlayList(name))).addSongs(song);
     }
 

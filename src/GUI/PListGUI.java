@@ -96,7 +96,7 @@ public class PListGUI extends JPanel implements ActionListener {
         libPanel.add(BMovies);
     }
 
-    private void setPLPanel(){
+    private void setPLPanel() {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridy = 2;
         gbc.gridx = 0;
@@ -105,9 +105,12 @@ public class PListGUI extends JPanel implements ActionListener {
         gbc.gridheight = 1;
         gbc.gridheight = 1;
         PLPanel.setBackground(Color.BLACK);
-        PLPanel.setLayout(new BoxLayout(PLPanel,1));
+        PLPanel.setLayout(new BoxLayout(PLPanel, 1));
+        setUpdatePlPanel();
+    }
+    public void setUpdatePlPanel(){
+        PLPanel.removeAll();
         JLabel playListLabel = new JLabel("PLAYLIST           ");
-
         playListLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         playListLabel.setIcon(new ImageIcon(getClass().getResource("PL.png")));
         playListLabel.setFont(headFont);
@@ -197,5 +200,6 @@ public class PListGUI extends JPanel implements ActionListener {
         PLPanel.add(PLButton);
 
     }
+
 }
 

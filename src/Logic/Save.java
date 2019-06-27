@@ -58,7 +58,7 @@ public class Save {
 
             // writing or saving ArrayList values to stream
             oos.writeObject(allSongs);
-            oos.flush();
+//            oos.flush();
             oos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
