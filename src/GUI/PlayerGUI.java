@@ -94,7 +94,7 @@ public class PlayerGUI extends JPanel implements ActionListener,ChangeListener {
         c.gridwidth=1;
         this.add(favBtn,c);
         showButton(favBtn);
-        favBtn.setIcon(new ImageIcon("C:\\Users\\Niloufar Eshghi\\Desktop\\emptyHeart.png"));
+        favBtn.setIcon(new ImageIcon(getClass().getResource("emptyHeart.png")));
         favBtn.addActionListener(this);
 
 
@@ -107,7 +107,7 @@ public class PlayerGUI extends JPanel implements ActionListener,ChangeListener {
         c.gridwidth=1;
         this.add(shuffleBtn,c);
         showButton(shuffleBtn);
-        shuffleBtn.setIcon(new ImageIcon("C:\\Users\\Niloufar Eshghi\\Desktop\\shuffle.png"));
+        shuffleBtn.setIcon(new ImageIcon(getClass().getResource("shuffle.png")));
         shuffleBtn.addActionListener(this);
 
         repeatBtn = new JButton();
@@ -119,7 +119,7 @@ public class PlayerGUI extends JPanel implements ActionListener,ChangeListener {
         c.gridwidth=1;
         this.add(repeatBtn,c);
         showButton(repeatBtn);
-        repeatBtn.setIcon(new ImageIcon("C:\\Users\\Niloufar Eshghi\\Desktop\\repeat.png"));
+        repeatBtn.setIcon(new ImageIcon(getClass().getResource("repeat.png")));
         repeatBtn.addActionListener(this);
 
 
@@ -242,18 +242,18 @@ public class PlayerGUI extends JPanel implements ActionListener,ChangeListener {
 
         } else if (e.getSource() == favBtn) {
             if (faved) {
-                favBtn.setIcon(new ImageIcon("C:\\Users\\Niloufar Eshghi\\Desktop\\redHeart.png"));
+                favBtn.setIcon(new ImageIcon(getClass().getResource("redHeart.png")));
                 faved = false;
             } else {
-                favBtn.setIcon(new ImageIcon("C:\\Users\\Niloufar Eshghi\\Desktop\\emptyHeart.png"));
+                favBtn.setIcon(new ImageIcon(getClass().getResource("emptyHeart.png")));
                 faved = true;
             }
         } else if (e.getSource() == shuffleBtn) {
             if (shuffled) {
-                shuffleBtn.setIcon(new ImageIcon(getClass().getResource("\\shuffleActivated.png")));
+                shuffleBtn.setIcon(new ImageIcon(getClass().getResource("shuffleActivated.png")));
                 shuffled = false;
             } else {
-                shuffleBtn.setIcon(new ImageIcon("C:\\Users\\Niloufar Eshghi\\Desktop\\shuffle.png"));
+                shuffleBtn.setIcon(new ImageIcon(getClass().getResource("shuffle.png")));
                 shuffled = true;
             }
         }else if(e.getSource() == repeatBtn){
