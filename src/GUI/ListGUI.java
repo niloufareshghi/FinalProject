@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.IOException;
 
 public class ListGUI extends JPanel {
+    PListGUI pListGUI=new PListGUI();
     public ListGUI() throws InvalidDataException, IOException, UnsupportedTagException {
         //setSize(w,h);
         setBackground(Color.DARK_GRAY);
@@ -21,7 +22,7 @@ public class ListGUI extends JPanel {
         gbc.gridheight= 1;
         gbc.gridy = 0;
         gbc.gridx = 0;
-        add(new PListGUI(),gbc);
+        add(pListGUI,gbc);
         gbc.fill=GridBagConstraints.BOTH;
         gbc.gridy =1;
         gbc.gridx = 0;
@@ -33,6 +34,10 @@ public class ListGUI extends JPanel {
         gbc.gridheight= 1;
         JPanel artWork =new JPanel();
         artWork.setBackground(Color.BLUE);
-        add(new ArtWorkGUI(new SongInfo("C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3")),gbc);
+        add(new ArtWorkGUI(new SongInfo("C:\\Users\\heyda\\Downloads\\Telegram Desktop\\01 - Intro.mp3")),gbc);
+    }
+
+    public PListGUI getpListGUI() {
+        return pListGUI;
     }
 }

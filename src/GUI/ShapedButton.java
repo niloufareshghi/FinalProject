@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class ShapedButton extends JPanel {
     JButton playButton = new JButton("PLAY");
     JButton southButton = new JButton();
-
     Image img;
 
     public ShapedButton() {
@@ -110,6 +109,7 @@ public class ShapedButton extends JPanel {
             File fileToSave =  fileChooser.getSelectedFile();
             String path=new String();
             path=fileToSave.getAbsolutePath();
+
             Controller.addSong(new SongInfo(path));
         }
     }

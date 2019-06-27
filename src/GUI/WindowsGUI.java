@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class WindowsGUI extends JFrame {
 
-    JPanel listGUI=new ListGUI();
+    ListGUI listGUI=new ListGUI();
     FriendsActivityGUI friendsActivityGUI=new FriendsActivityGUI();
     CenterGUI artsGUI=new CenterGUI();
     PlayerGUI playerGUI=new PlayerGUI();
@@ -101,8 +101,9 @@ public class WindowsGUI extends JFrame {
         return friendsActivityGUI;
     }
 
-    public JPanel getListGUI() {
+    public ListGUI getListGUI() {
         return listGUI;
+
     }
 
     public CenterGUI getArtsGUI() {

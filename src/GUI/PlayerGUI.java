@@ -250,7 +250,7 @@ public class PlayerGUI extends JPanel implements ActionListener,ChangeListener {
             }
         } else if (e.getSource() == shuffleBtn) {
             if (shuffled) {
-                shuffleBtn.setIcon(new ImageIcon("C:\\Users\\Niloufar Eshghi\\Desktop\\shuffleActivated.png"));
+                shuffleBtn.setIcon(new ImageIcon(getClass().getResource("\\shuffleActivated.png")));
                 shuffled = false;
             } else {
                 shuffleBtn.setIcon(new ImageIcon("C:\\Users\\Niloufar Eshghi\\Desktop\\shuffle.png"));

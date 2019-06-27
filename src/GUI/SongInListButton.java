@@ -1,5 +1,7 @@
 package GUI;
 
+import Controller.Controller;
+import Logic.PlayList;
 import Logic.SongInfo;
 
 import javax.swing.*;
@@ -25,7 +27,8 @@ public class SongInListButton extends SongsButton {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Controller.getRepository().removeSongFromPL(PLName,getSongInfo());
+                Controller.getWindowsGUI().getArtsGUI().getMainGUI().setSongsPlayList(Controller.getRepository().getLists().get(Controller.getRepository().getLists().indexOf(new PlayList(PLName))));
             }
         });
     }

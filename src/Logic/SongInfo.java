@@ -20,7 +20,7 @@ public class SongInfo {
     FileInputStream file;
     private String[] info;
     private BufferedImage img;
-    static String filename;
+     String filename;
 
     public SongInfo(String filename) throws IOException, UnsupportedTagException, InvalidDataException {
         info = new String[4];

@@ -39,6 +39,11 @@ public class SongsButton extends ShapedButton {
             }
         });
     }
+
+    public SongInfo getSongInfo() {
+        return songInfo;
+    }
+
     void setDeleteButton(){
         deleteButton.setIcon(new ImageIcon(getClass().getResource("trash.png")));
         deleteButton.setText("D");
@@ -61,9 +66,11 @@ public class SongsButton extends ShapedButton {
                 for(int i=0;i<Controller.getRepository().getLists().size();i++){
                     names.add(Controller.getRepository().getLists().get(i).getName());
                 }
-                int choosed= (int) JOptionPane.showInputDialog( Controller.getWindowsGUI(),"Pick a printer", "Input", JOptionPane.QUESTION_MESSAGE,
+                 String choosed=(String)JOptionPane.showInputDialog( Controller.getWindowsGUI(),"Pick a playlist", "add to playList", JOptionPane.QUESTION_MESSAGE,
                         null, names.toArray(), "Titan");
-                System.out.println(choosed);
+                if(choosed!=null){
+                    Controller.addSongToPL(choosed,songInfo);
+                }
             }
         });
     }
@@ -76,6 +83,9 @@ public class SongsButton extends ShapedButton {
     private void setInfo(){
         setBGImage(songInfo.getArtwork());
         setPlayButtonTexT(songInfo.getTitle());
+    }
+    public String path(){
+        return songInfo.getFilename();
     }
     @Override
     protected void setPlayAction(){

@@ -37,9 +37,13 @@ public class MainGUI extends JScrollPane {
         setList();
         status = MainStatus.SONGS;
         Hsize = 0;
+        for (int i = 0; i < songInfos.size(); i++) {
+            System.out.println(new SongsButton(songInfos.get(i)).path());
+        }
         addToList(new ShapedButton());
         for (int i = 0; i < songInfos.size(); i++) {
-        addToList(new SongsButton(songInfos.get(i)));
+            SongsButton songsButton= new SongsButton(songInfos.get(i)) ;
+            addToList(songsButton);
 //        for (int i = 0; i < 40; i++) {
 //        addToList(new SongsButton(null));
         }
@@ -62,7 +66,9 @@ public class MainGUI extends JScrollPane {
         addToList(new AlbumButton(null,album.getName(),album.getArtist()));
         for (int i = 0; i < album.getSongs().size(); i++) {
             addToList(new SongsButton(album.getSongs().get(i)));
+
         }
+
     }
     public void setAlbums(ArrayList<Albums> albums){
         setList();

@@ -28,7 +28,10 @@ public class Controller {
     }
 
     public static void addSong(SongInfo songInfo) {
+
         repository.addSong(songInfo);
+
+        System.out.println(songInfo.getFilename()+" add Song");
     }
 
     public static void removeSong(SongInfo songInfo) {
