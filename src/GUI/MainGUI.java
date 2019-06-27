@@ -17,12 +17,18 @@ public class MainGUI extends JScrollPane {
     int Hsize = 0;
     GridLayout myGrid;
     private MainStatus status;
-
+    ArrayList<SongInfo> songs;
+    PlayList playListOn=null;
+    Albums albumsOn=null;
     public MainGUI() {
+
         super(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     }
 
     private void setList() {
+        songs=new ArrayList<SongInfo>();
+        PlayList playListOn=null;
+        Albums albumsOn=null;
         verticalListed.removeAll();
         lineListed.removeAll();
         verticalListed.add(lineListed);
@@ -35,6 +41,7 @@ public class MainGUI extends JScrollPane {
 
     public void setSongsList(ArrayList<SongInfo> songInfos) {
         setList();
+        songs=songInfos;
         status = MainStatus.SONGS;
         Hsize = 0;
         for (int i = 0; i < songInfos.size(); i++) {
@@ -51,6 +58,7 @@ public class MainGUI extends JScrollPane {
 
     public void setSongsPlayList(PlayList playList) {
         setList();
+        playListOn=playList;
         status = MainStatus.PLISTSONGS;
         Hsize = 0;
         addToList(new MainOfPListButton(playList.getName()));
@@ -61,6 +69,7 @@ public class MainGUI extends JScrollPane {
 
     public void setSongsListOfAlbum(Albums album) {
         setList();
+        albumsOn=album;
         status = MainStatus.ALBUMLIST;
         Hsize = 0;
         addToList(new AlbumButton(null,album.getName(),album.getArtist()));
