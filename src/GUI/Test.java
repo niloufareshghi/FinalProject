@@ -13,9 +13,10 @@ import java.io.IOException;
 
 public class Test {
 
-    public static void main(String[] args) throws UnsupportedTagException, UnsupportedAudioFileException, InvalidDataException, IOException, JavaLayerException {
+    public static void main(String[] args) throws UnsupportedTagException, UnsupportedAudioFileException, InvalidDataException, IOException, JavaLayerException, ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         // write your code here
         JFrame.setDefaultLookAndFeelDecorated(true);
+//        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         Controller.setRepository(new Repository());
         Load load=new Load();
         WindowsGUI mainGUI =new WindowsGUI();

@@ -2,14 +2,15 @@ package GUI;
 
 import Controller.Controller;
 import Logic.SongInfo;
-import org.omg.CORBA.BAD_INV_ORDER;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
+import javazoom.jl.decoder.JavaLayerException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SongsButton extends ShapedButton {
@@ -92,7 +93,19 @@ public class SongsButton extends ShapedButton {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    ArrayList<SongInfo> songInfos=new ArrayList<>();
+                    songInfos.add(songInfo);
+                    Controller.getWindowsGUI().getPlayerGUI().setListToPlay(songInfos);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedTagException e1) {
+                    e1.printStackTrace();
+                } catch (InvalidDataException e1) {
+                    e1.printStackTrace();
+                } catch (JavaLayerException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
     }

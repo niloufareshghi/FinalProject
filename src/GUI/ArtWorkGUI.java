@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ArtWorkGUI extends JPanel {
-    SongInfo songInfo;
+    static SongInfo songInfo;
     Image img;
     JLabel artTitle = new JLabel();
     JLabel artYear = new JLabel();
@@ -26,6 +26,12 @@ public class ArtWorkGUI extends JPanel {
 //        setJlabel(artArtist, null, "Artist");
 //        setJlabel(artYear, null, "Year");
 //        img =songInfo.getArtwork();
+        setSongInfo(songInfo);
+
+    }
+
+    public void setSongInfo(SongInfo songInfo) {
+        removeAll();
         this.songInfo = songInfo;
         img = this.songInfo.getArtwork();
         setBackground(Color.black);
@@ -44,13 +50,20 @@ public class ArtWorkGUI extends JPanel {
         setLayout(new BorderLayout());
 //        songInfoP.setPreferredSize(new Dimension(50,50));
         add(songInfoP, BorderLayout.PAGE_END);
+        updateUI();
+    }
+
+    public ArtWorkGUI() throws IOException {
+//        img= ImageIO.read(new File(String.valueOf(getClass().getResource("Jpotify.png"))));
 
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if(songInfo!=null)
         img = songInfo.getArtwork();
+        System.out.println("done");
         if (img != null) {
             g.drawImage(img, 0, 0, this.getWidth(), this.getHeight() - 50, this);
         }
