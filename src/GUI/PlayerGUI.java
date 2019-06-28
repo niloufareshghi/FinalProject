@@ -6,6 +6,7 @@ import Logic.SongInfo;
 import Logic.VolumeControl;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import javazoom.jl.decoder.Equalizer;
 import javazoom.jl.decoder.JavaLayerException;
 
 import java.awt.*;
@@ -45,6 +46,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
     private ArrayList<SongInfo> songs;
     private ArrayList<Integer> arranges;
     private int arrange;
+    private Equalize equalizer;
 
     public PlayerGUI() throws IOException, JavaLayerException, InvalidDataException, UnsupportedTagException {
 
@@ -72,6 +74,17 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
         if (song != null)
             thread = new PlayerThread(song.getFilename());
+         equalizer=new Equalize();
+        c.fill = GridBagConstraints.BOTH;
+        c.anchor = GridBagConstraints.CENTER;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.gridx = 1;
+        c.gridwidth = 3;
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 0;
+        this.add(equalizer,c);
+
         prevBtn = new JButton();
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
@@ -79,7 +92,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         c.weighty = 1;
         c.gridx = 4;
         c.gridwidth = 1;
-        c.insets = new Insets(0, 300, 0, 0);
+        c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 0;
         this.add(prevBtn, c);
         showButton(prevBtn);
@@ -218,10 +231,12 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
         if (timer != null && timer.isRunning())
             timer.stop();
+            equalizer.timer.stop();
+
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if(!equalizer.timer.isRunning())equalizer.timer.start();
                 playSlider.setValue(counting);
                 counting++;
                 System.out.println(counting);
@@ -331,6 +346,8 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                 thread.pause();
                 i = 1;
                 timer.stop();
+                equalizer.timer.stop();
+
                 pOp = true;
             }
         } else if (e.getSource() == prevBtn && thread != null) {
@@ -464,6 +481,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
             try {
                 thread.pause();
                 timer.stop();
+                equalizer.timer.stop();
                 thread.seekTo((int) (((double) playSlider.getValue() / playSlider.getMaximum()) * thread.getMp3().getFrameCount()));
                 //playSlider.setValue(playSlider.getValue());
                 //counting = playSlider.getValue();
