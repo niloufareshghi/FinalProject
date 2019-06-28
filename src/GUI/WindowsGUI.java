@@ -39,7 +39,7 @@ public class WindowsGUI extends JFrame {
         setLayout(new GridBagLayout());
         gbc.fill=GridBagConstraints.BOTH;
         gbc.weighty=0.5;
-        gbc.weightx=1;
+        gbc.weightx=2;
         gbc.ipady=600;
         gbc.ipadx=0;
         addJpanel(listGUI,0,0,1,2);
@@ -56,7 +56,7 @@ public class WindowsGUI extends JFrame {
         gbc.weighty=0;
         addJpanel(playerGUI,1,1,2,1);
 //        pack();
-        setSize(1000,1000);
+        setSize(1500,1000);
         setVisible(true);
         addWindowListener(new WindowListener() {
             @Override

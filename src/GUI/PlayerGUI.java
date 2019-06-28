@@ -77,13 +77,16 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
          equalizer=new Equalize();
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.gridx = 1;
-        c.gridwidth = 3;
+        c.weightx = 0.1;
+        c.weighty = 0.1;
+        c.gridx = 0;
+        c.gridwidth = 1;
+        c.gridheight = 2;
+
         c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 0;
         this.add(equalizer,c);
+        c.gridheight = 1;
 
         prevBtn = new JButton();
         c.fill = GridBagConstraints.BOTH;
