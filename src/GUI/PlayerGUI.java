@@ -410,7 +410,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
         song = songInfo;
         Controller.getWindowsGUI().getListGUI().setArtWork(songInfo);
-
+        Controller.makeRecentlyPlayed(song);
         if (Controller.getRepository().getLists().get(0).getSongs().contains(songInfo)) {
             faved = true;
         } else faved = false;

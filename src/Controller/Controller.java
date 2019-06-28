@@ -37,7 +37,20 @@ public class Controller {
     public static void removeSong(SongInfo songInfo) {
         repository.removeSong(songInfo);
     }
+    public static void makeRecentlyPlayed(SongInfo songInfo){
+        SongInfo swapSong=Controller.getRepository().getAllSongs().get(0);
+        int index = Controller.getRepository().getAllSongs().indexOf(songInfo);
+        for(int i=0;i<index;i++){
+            Controller.getRepository().getAllSongs().set(i,Controller.getRepository().getAllSongs().get(i+1));
 
+        }
+        Controller.getRepository().getAllSongs().set(index,swapSong);
+        if(Controller.getWindowsGUI().getArtsGUI().getMainGUI().getStatus()==MainStatus.SONGS){
+            Controller.getWindowsGUI().getArtsGUI().getMainGUI().setSongsList(Controller.getAllSongs());
+        }
+
+//        Controller.getRepository()
+}
     public static void deleteSong(SongInfo songInfo) {
         if (windowsGUI.getArtsGUI().getMainGUI().getStatus().equals(MainStatus.ALBUMLIST)) {
             String name = songInfo.getAlbum();
