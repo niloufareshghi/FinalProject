@@ -31,7 +31,7 @@ public class AudioPlayer{
     long pause;
     int totalLength;
     //AudioInputStream ais;
-    static String filepath = "C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3";
+    static String filepath = "C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Mohsen Namjoo - Shekveh.mp3";
     volatile Player player;
     Mp3File mp3file;
 

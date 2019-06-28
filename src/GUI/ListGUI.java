@@ -10,11 +10,14 @@ import java.io.IOException;
 
 public class ListGUI extends JPanel {
     PListGUI pListGUI=new PListGUI();
+    ArtWorkGUI artWork =new ArtWorkGUI();
+
+    GridBagConstraints gbc =new GridBagConstraints();
+
     public ListGUI() throws InvalidDataException, IOException, UnsupportedTagException {
         //setSize(w,h);
         setBackground(Color.DARK_GRAY);
         setLayout(new GridBagLayout());
-        GridBagConstraints gbc =new GridBagConstraints();
         gbc.fill=GridBagConstraints.BOTH;
         gbc.weightx=1;
         gbc.weighty=3;
@@ -32,12 +35,22 @@ public class ListGUI extends JPanel {
         gbc.ipadx=0;
         gbc.gridheight=1;
         gbc.gridheight= 1;
-        JPanel artWork =new JPanel();
-        artWork.setBackground(Color.BLUE);
-        add(new ArtWorkGUI(new SongInfo("C:\\Users\\heyda\\Downloads\\Telegram Desktop\\01 - Intro.mp3")),gbc);
+        add(artWork,gbc);
     }
 
     public PListGUI getpListGUI() {
         return pListGUI;
+    }
+
+    public void setArtWork(SongInfo songInfo) throws InvalidDataException, IOException, UnsupportedTagException {
+//        remove(artWork)
+        this.artWork.setSongInfo(songInfo);
+        updateUI();
+//        add(this.artWork,gbc);
+//        updateUI();
+    }
+
+    public ArtWorkGUI getArtWork() {
+        return artWork;
     }
 }

@@ -5,7 +5,7 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import javazoom.jl.decoder.JavaLayerException;
-import src.javazoom.jl.player.advanced.AdvancedPlayer;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 
 import java.io.*;
 
@@ -17,27 +17,44 @@ public class PlayerThread extends Thread {
     File myFile;
     Mp3File mp3;
    //static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\11460851_11460513.mp3";
-   static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\06 Soghati.mp3";
+    String filepath ;///= "C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Saman-Jalili-Mard-256.mp3";
     boolean isPaused;
     int goalFrame;
     int passedFrame;
     int pausedPoint;
+    boolean finished;
 
-    public PlayerThread() throws JavaLayerException, IOException, InvalidDataException, UnsupportedTagException {
+    public PlayerThread(String filepath) throws JavaLayerException, IOException, InvalidDataException, UnsupportedTagException {
+        this.filepath=filepath;
         myFile = new File(filepath);
         fileInputStream = new FileInputStream(myFile);
         player = new AdvancedPlayer(fileInputStream);
         isPaused = false;
         mp3 = new Mp3File(myFile);
         goalFrame=-1;
+        finished=false;
+
     }
 
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
+    }
 
+    public AdvancedPlayer getPlayer() {
+        return player;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
 
     public void run() {
        while(true){
            try {
-               if (!player.play(1)) break;
+               if (!player.play(1)) {
+                   finished=true;
+                   break;
+               }
            } catch (JavaLayerException e) {
                e.printStackTrace();
            }
@@ -109,5 +126,8 @@ public class PlayerThread extends Thread {
 
     public void seekTo(int frame) throws javazoom.jl.decoder.JavaLayerException, FileNotFoundException {
         goalFrame=frame;
+    }
+    public void closethread(){
+        player.close();
     }
 }
