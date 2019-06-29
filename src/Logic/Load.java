@@ -5,6 +5,7 @@ import GUI.PListGUI;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class Load {
         repository = Controller.getRepository();
         loadAllSong();
         loadPL();
+        setUserName();
     }
 
     private void setAllSongs() throws InvalidDataException, IOException, UnsupportedTagException {
@@ -32,7 +34,41 @@ public class Load {
 
         }
     }
+    private void setUserName(){
+        Controller.setUsername(null);
+        // creating input stream variables
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
 
+        // creating List reference to hold AL values
+        // after de-serialization
+
+        try {
+            // reading binary data
+            if (Files.exists(Paths.get("user.txt"))) {
+                fis = new FileInputStream("user.txt");
+
+                // converting binary-data to java-object
+                ois = new ObjectInputStream(fis);
+
+                // reading object's value and casting ArrayList<String>
+                Controller.setUsername( (String) ois.readObject());
+            }
+            else{
+                do {
+                    Controller.setUsername((JOptionPane.showInputDialog("Enter Your Name: ","UserName")));
+                }while ( Controller.getUsername()==null || Controller.getUsername().equals(""));
+
+            }
+        } catch (FileNotFoundException fnfex) {
+            fnfex.printStackTrace();
+        } catch (IOException ioex) {
+            ioex.printStackTrace();
+        } catch (ClassNotFoundException ccex) {
+            ccex.printStackTrace();
+        }
+
+    }
     private void setPLists() throws InvalidDataException, IOException, UnsupportedTagException {
         if (PLists != null) {
             for (int i = 0; i < PLists.size(); i++) {

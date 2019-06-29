@@ -11,6 +11,7 @@ public class Controller {
     static WindowsGUI windowsGUI;
     static Repository repository;
     static SongInfo lastSongInfo;
+    static String username;
     private Controller() {
 
     }
@@ -25,6 +26,13 @@ public class Controller {
 
     public static void setLastSongInfo(SongInfo lastSongInfo) {
         Controller.lastSongInfo = lastSongInfo;
+    }
+
+    public static void setUsername(String username) {
+        Controller.username = username;
+    }
+    public static String getUsername(){
+        return Controller.username;
     }
 
     public static Repository getRepository() {

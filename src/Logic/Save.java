@@ -17,6 +17,7 @@ public class Save {
         repository = Controller.getRepository();
         saveAllSongs();
         savePL();
+        saveUserName();
     }
 
     private void setAllSongs(ArrayList<SongInfo> allSongs) {
@@ -43,7 +44,29 @@ public class Save {
 
 
     }
+    private void saveUserName(){
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
 
+        try {
+            // for writing or saving binary data
+            fos = new FileOutputStream("user.txt");
+
+            // converting java-object to binary-format
+            oos = new ObjectOutputStream(fos);
+
+            // writing or saving ArrayList values to stream
+            oos.writeObject(Controller.getUsername());
+//            oos.flush();
+            oos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("username saved");
+
+    }
     private void saveAllSongs() {
         setAllSongs(repository.getAllSongs());
         FileOutputStream fos = null;
