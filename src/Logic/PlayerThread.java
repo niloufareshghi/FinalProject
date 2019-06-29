@@ -44,15 +44,16 @@ public class PlayerThread extends Thread {
         return player;
     }
 
-    public boolean isFinished() {
+    synchronized public boolean isFinished() {
         return finished;
     }
 
     public void run() {
        while(true){
+
            try {
                if (!player.play(1)) {
-                   finished=true;
+
                    break;
                }
            } catch (JavaLayerException e) {
@@ -112,9 +113,11 @@ public class PlayerThread extends Thread {
     }
 
     public void pause() {
-        this.isPaused = true;
-        pausedPoint = passedFrame;
-    }
+
+
+            this.isPaused = true;
+            pausedPoint = passedFrame;
+        }
 
 
     public void resumeSong(){
@@ -127,9 +130,5 @@ public class PlayerThread extends Thread {
     public void seekTo(int frame) throws javazoom.jl.decoder.JavaLayerException, FileNotFoundException {
         goalFrame=frame;
     }
-    public void closethread(){
-        synchronized(player) {
-            player.close();
-        }
-    }
+
 }
