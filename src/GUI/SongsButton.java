@@ -37,7 +37,11 @@ public class SongsButton extends ShapedButton {
         southButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    Controller.getWindowsGUI().getArtsGUI().getMainGUI().Lyric(songInfo);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
     }
