@@ -105,6 +105,9 @@ public class TopGUI extends JPanel {
         add(mb);
         setAction(searchButton);
         setLayout(flowLayout);
+        JButton Username=new JButton(Controller.getUsername());
+        add(Username);
+
     }
 
 
