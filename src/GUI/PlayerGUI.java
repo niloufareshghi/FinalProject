@@ -431,7 +431,9 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         if (Controller.getRepository().getLists().get(0).getSongs().contains(songInfo)) {
             faved = true;
         } else faved = false;
-
+        if(Controller.getRepository().getLists().get(1).getSongs().contains(songInfo)){
+            Controller.setLastSongInfo(songInfo);
+        }
 //        this.songs=new ArrayList<>();
 //        this.songs.add(songInfo);
         i = 0;

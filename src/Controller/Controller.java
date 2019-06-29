@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Controller {
     static WindowsGUI windowsGUI;
     static Repository repository;
-
+    static SongInfo lastSongInfo;
     private Controller() {
 
     }
@@ -21,6 +21,10 @@ public class Controller {
      */
     public static void setRepository(Repository repository) {
         Controller.repository = repository;
+    }
+
+    public static void setLastSongInfo(SongInfo lastSongInfo) {
+        Controller.lastSongInfo = lastSongInfo;
     }
 
     public static Repository getRepository() {
