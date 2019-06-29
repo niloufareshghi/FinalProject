@@ -50,12 +50,6 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
     public PlayerGUI() throws IOException, JavaLayerException, InvalidDataException, UnsupportedTagException {
 
-
-        update();
-
-    }
-
-    public void update() throws IOException, InvalidDataException, UnsupportedTagException, JavaLayerException {
         removeAll();
         pOp = true;
         counting = 0;
@@ -316,6 +310,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
 
     }
+
 
     int i = 0;
 
