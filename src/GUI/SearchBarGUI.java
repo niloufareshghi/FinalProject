@@ -30,6 +30,9 @@ public class SearchBarGUI extends JPanel {
         add(searchButton);
         setAction(searchButton);
         setLayout(flowLayout);
+        JButton Username=new JButton(Controller.getUsername());
+        add(Username);
+
     }
     private void setAction(JButton button){
         button.addActionListener(new ActionListener() {
