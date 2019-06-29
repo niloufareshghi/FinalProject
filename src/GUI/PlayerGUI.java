@@ -59,7 +59,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         removeAll();
         pOp = true;
         counting = 0;
-        if (thread != null) thread.closethread();
+
 
 //       if(song!=null){
 //           if(thread!=null)
@@ -72,8 +72,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
 //        thread = new PlayerThread();
 
-        if (song != null)
-            thread = new PlayerThread(song.getFilename());
+
          equalizer=new Equalize();
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
@@ -427,8 +426,10 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
     }
 
     public void setSong(SongInfo songInfo) throws InvalidDataException, IOException, UnsupportedTagException, JavaLayerException {
-
+        if (thread != null) thread.closethread();
         song = songInfo;
+        if (song != null)
+            thread = new PlayerThread(song.getFilename());
         Controller.getWindowsGUI().getListGUI().setArtWork(songInfo);
         Controller.makeRecentlyPlayed(song);
         if (Controller.getRepository().getLists().get(0).getSongs().contains(songInfo)) {
