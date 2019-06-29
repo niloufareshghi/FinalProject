@@ -4,6 +4,7 @@ import Controller.Controller;
 import Logic.SongInfo;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import javazoom.jl.decoder.Control;
 import javazoom.jl.decoder.JavaLayerException;
 
 import javax.swing.*;
@@ -93,17 +94,28 @@ public class SongsButton extends ShapedButton {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+//                try {
+//                    ArrayList<SongInfo> songInfos=new ArrayList<>();
+//                    songInfos.add(songInfo);
+//                    Controller.getWindowsGUI().getPlayerGUI().setListToPlay(songInfos);
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                } catch (UnsupportedTagException e1) {
+//                    e1.printStackTrace();
+//                } catch (InvalidDataException e1) {
+//                    e1.printStackTrace();
+//                } catch (JavaLayerException e1) {
+//                    e1.printStackTrace();
+//                }
                 try {
-                    ArrayList<SongInfo> songInfos=new ArrayList<>();
-                    songInfos.add(songInfo);
-                    Controller.getWindowsGUI().getPlayerGUI().setListToPlay(songInfos);
+                    Controller.getWindowsGUI().getPlayerGUI().setSong(songInfo);
+                } catch (InvalidDataException e1) {
+                    e1.printStackTrace();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 } catch (UnsupportedTagException e1) {
                     e1.printStackTrace();
-                } catch (InvalidDataException e1) {
-                    e1.printStackTrace();
-                } catch (JavaLayerException e1) {
+                } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
             }
