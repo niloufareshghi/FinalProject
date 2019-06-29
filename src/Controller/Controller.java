@@ -67,7 +67,7 @@ public class Controller {
         windowsGUI.getArtsGUI().getMainGUI().setSongsList(getAllSongs());
     }
 
-    public static ArrayList getAllSongs() {
+    public static ArrayList<SongInfo> getAllSongs() {
         return repository.getAllSongs();
     }
 

@@ -4,6 +4,7 @@ import Controller.Controller;
 import Logic.SongInfo;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import javazoom.jl.decoder.JavaLayerException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -124,7 +125,17 @@ public class ShapedButton extends JPanel {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    Controller.getWindowsGUI().getPlayerGUI().setListToPlay(Controller.getWindowsGUI().getArtsGUI().mainGUI.songs);
+                } catch (JavaLayerException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedTagException e1) {
+                    e1.printStackTrace();
+                } catch (InvalidDataException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
     }
