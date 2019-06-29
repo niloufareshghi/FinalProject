@@ -128,6 +128,8 @@ public class PlayerThread extends Thread {
         goalFrame=frame;
     }
     public void closethread(){
-        player.close();
+        synchronized(player) {
+            player.close();
+        }
     }
 }
