@@ -75,8 +75,15 @@ public class PlayerThread extends Thread {
                            myFile = new File(filepath);
                            fileInputStream = new FileInputStream(myFile);
                            player = new AdvancedPlayer(fileInputStream);
+                           mp3 = new Mp3File(myFile);
                            player.play(goalFrame,goalFrame+1);
                        } catch (JavaLayerException | FileNotFoundException e) {
+                           e.printStackTrace();
+                       } catch (UnsupportedTagException e) {
+                           e.printStackTrace();
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       } catch (InvalidDataException e) {
                            e.printStackTrace();
                        }
                        goalFrame=-1;

@@ -73,7 +73,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 //        thread = new PlayerThread();
 
 
-         equalizer=new Equalize();
+        equalizer = new Equalize();
         c.fill = GridBagConstraints.BOTH;
         c.anchor = GridBagConstraints.CENTER;
         c.weightx = 0.1;
@@ -84,7 +84,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
         c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 0;
-        this.add(equalizer,c);
+        this.add(equalizer, c);
         c.gridheight = 1;
 
         prevBtn = new JButton();
@@ -237,7 +237,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!equalizer.timer.isRunning())equalizer.timer.start();
+                if (!equalizer.timer.isRunning()) equalizer.timer.start();
                 counting++;
                 playSlider.setValue(counting);
 //                System.out.println(counting);
@@ -252,7 +252,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                 long minutes = (long) (((double) playSlider.getValue()) / 60);
                 long seconds = (long) (((double) playSlider.getValue()) % 60);
                 labelTimeCounter.setText(String.format("%02d:%02d", minutes, seconds));
-                if (playSlider.getValue()==playSlider.getMaximum()) {
+                if (playSlider.getValue() == playSlider.getMaximum()) {
                     if (repeat) {
                         try {
                             setSong(song);
@@ -270,9 +270,8 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                         try {
                             if (arrange == arranges.size() - 1) {
                                 setSong(songs.get(arranges.get(0)));
-                                arrange=0;
-                            }
-                            else {
+                                arrange = 0;
+                            } else {
                                 setNext();
                             }
                         } catch (JavaLayerException e1) {
@@ -316,7 +315,6 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         });
 
 
-
     }
 
     int i = 0;
@@ -328,26 +326,16 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                 playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
                 if (i == 0) {
 
-                    thread.start();
-                    timer.start();
-                    timer.setInitialDelay(0);
+                    start();
                 }
 
                 if (i == 1) {
-                    thread.resumeSong();
-                    timer.setInitialDelay(0);
-                    timer.start();
+                    resume();
                 }
 
                 pOp = false;
             } else {
-                playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
-                thread.pause();
-                i = 1;
-                timer.stop();
-                equalizer.timer.stop();
-
-                pOp = true;
+                pause();
             }
         } else if (e.getSource() == prevBtn && thread != null) {
             try {
@@ -421,44 +409,35 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
 
     }
-    private void setInfo(){
-        if(thread!=null){
-        playSlider.setMaximum((int) thread.getMp3().getLengthInSeconds()-1);
-        labelDuration.setText(String.format("%02d:%02d", playSlider.getMaximum() / 60, playSlider.getMaximum() % 60));}
+
+    private void setInfo() {
+        if (song != null) {
+            playSlider.setMaximum((int) thread.getMp3().getLengthInSeconds() - 1);
+            labelDuration.setText(String.format("%02d:%02d", playSlider.getMaximum() / 60, playSlider.getMaximum() % 60));
+        }
     }
+
     public void setSong(SongInfo songInfo) throws InvalidDataException, IOException, UnsupportedTagException, JavaLayerException {
         song = songInfo;
 
-        if (thread != null){
-            thread.pause();
-            System.out.println("stoped");
+        if (thread != null) {
+            pause();
             thread.setFilepath(songInfo.getFilename());
+            setInfo();
             timer.stop();
             equalizer.timer.stop();
-            thread.seekTo(1);
-//            if (playSlider.getValue() < thread.getPausedPoint()) {
-//                counting = playSlider.getValue();
-//                playSlider.setValue(playSlider.getValue());
-//            }
-            thread.pause();
+            thread.seekTo(0);
+            counting = 0;
             playSlider.setValue(0);
-            counting=0;
-            timer.setInitialDelay(0);
-
-            playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
-            thread.pause();
-            i = 1;
-            timer.stop();
-            equalizer.timer.stop();
-
-            pOp = true;updateUI();
-        }
-        else{
+            updateUI();
+        } else {
 
             thread = new PlayerThread(song.getFilename());
+            setInfo();
+
         }
-        removeAll();
-        update();
+//        pause();
+
         Controller.getWindowsGUI().getListGUI().setArtWork(songInfo);
         Controller.makeRecentlyPlayed(song);
         if (Controller.getRepository().getLists().get(0).getSongs().contains(songInfo)) {
@@ -467,7 +446,6 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
 //        this.songs=new ArrayList<>();
 //        this.songs.add(songInfo);
-        setInfo();
         updateUI();
     }
 
@@ -496,24 +474,46 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         }
 
         setSong(songs.get(arranges.get(0)));
-        setThreadStarts();
+//        setThreadStarts();
     }
 
-    public void setThreadStarts() throws IOException, UnsupportedTagException, InvalidDataException, JavaLayerException {
+    private void setThreadStarts() throws IOException, UnsupportedTagException, InvalidDataException, JavaLayerException {
         playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
 
-        if(i==0) {
-            thread.start();
-            timer.start();
-            timer.setInitialDelay(0);
+        if (i == 0) {
+            start();
+        } else {
+            resume();
         }
-        else{
-            thread.resumeSong();
-            timer.setInitialDelay(0);
-            timer.start();
-        }
+    }
+
+    private void pause() {
+
+        playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
+        thread.pause();
+        i = 1;
+        timer.stop();
+        equalizer.timer.stop();
+
+        pOp = true;
+    }
+
+    private void start() {
+        playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
+        thread.start();
+        timer.start();
+        timer.setInitialDelay(0);
         pOp = false;
-//        updateUI();
+
+    }
+
+    private void resume() {
+        playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
+        thread.resumeSong();
+        timer.setInitialDelay(0);
+        timer.start();
+        pOp = false;
+
     }
 
     @Override
@@ -532,7 +532,6 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                 }
                 timer.start();
                 equalizer.timer.start();
-
 
 
             } catch (JavaLayerException | IOException e1) {
