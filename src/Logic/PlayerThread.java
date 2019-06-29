@@ -16,34 +16,45 @@ public class PlayerThread extends Thread {
     BufferedInputStream bufferedInputStream;
     File myFile;
     Mp3File mp3;
-    static String filepath = "C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Justina-Rahro-320.mp3";
-//    static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\06 Soghati.mp3";
+    //static String filepath = "C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\11460851_11460513.mp3";
+    String filepath ;///= "C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Saman-Jalili-Mard-256.mp3";
     boolean isPaused;
     int goalFrame;
     int passedFrame;
     int pausedPoint;
+    boolean finished;
 
-    public PlayerThread() throws JavaLayerException, IOException, InvalidDataException, UnsupportedTagException {
+    public PlayerThread(String filepath) throws JavaLayerException, IOException, InvalidDataException, UnsupportedTagException {
+        this.filepath=filepath;
         myFile = new File(filepath);
         fileInputStream = new FileInputStream(myFile);
         player = new AdvancedPlayer(fileInputStream);
         isPaused = false;
         mp3 = new Mp3File(myFile);
         goalFrame=-1;
+        finished=false;
+
     }
 
-    public static void setFilepath(String filePath){
-        filepath=filePath;
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
     }
 
-    public static String getFilepath() {
-        return filepath;
+    public AdvancedPlayer getPlayer() {
+        return player;
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
     public void run() {
         while(true){
             try {
-                if (!player.play(1)) break;
+                if (!player.play(1)) {
+                    finished=true;
+                    break;
+                }
             } catch (JavaLayerException e) {
                 e.printStackTrace();
             }
@@ -65,15 +76,6 @@ public class PlayerThread extends Thread {
                             player = new AdvancedPlayer(fileInputStream);
                             player.play(goalFrame,goalFrame+1);
                         } catch (JavaLayerException | FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            mp3 = new Mp3File(myFile);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedTagException e) {
-                            e.printStackTrace();
-                        } catch (InvalidDataException e) {
                             e.printStackTrace();
                         }
                         goalFrame=-1;
@@ -124,5 +126,8 @@ public class PlayerThread extends Thread {
 
     public void seekTo(int frame) throws javazoom.jl.decoder.JavaLayerException, FileNotFoundException {
         goalFrame=frame;
+    }
+    public void closethread(){
+        player.close();
     }
 }

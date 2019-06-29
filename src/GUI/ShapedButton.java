@@ -126,14 +126,14 @@ public class ShapedButton extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Controller.getWindowsGUI().getPlayerGUI().setSongs(Controller.getWindowsGUI().getArtsGUI().mainGUI.songs);
+                    Controller.getWindowsGUI().getPlayerGUI().setListToPlay(Controller.getWindowsGUI().getArtsGUI().mainGUI.songs);
                 } catch (InvalidDataException e1) {
                     e1.printStackTrace();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 } catch (UnsupportedTagException e1) {
                     e1.printStackTrace();
-                } catch (InterruptedException e1) {
+                } catch (JavaLayerException e1) {
                     e1.printStackTrace();
                 }
             }

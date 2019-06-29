@@ -6,6 +6,7 @@ import Logic.SongInfo;
 import Logic.VolumeControl;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import javazoom.jl.decoder.Equalizer;
 import javazoom.jl.decoder.JavaLayerException;
 
 import java.awt.*;
@@ -20,6 +21,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+@SuppressWarnings("Duplicates")
 public class PlayerGUI extends JPanel implements ActionListener, ChangeListener {
     private JButton repeatBtn;
     private JButton shuffleBtn;
@@ -39,22 +41,49 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
     VolumeControl controller;
     private boolean faved = false;
     private boolean shuffled = false;
-    private SongInfo song ;
-    private boolean repeat;
+    private boolean repeat = false;
+    private SongInfo song;
     private ArrayList<SongInfo> songs;
     private ArrayList<Integer> arranges;
     private int arrange;
-    int i = 0;
+    private Equalize equalizer;
 
     public PlayerGUI() throws IOException, JavaLayerException, InvalidDataException, UnsupportedTagException {
 
 
+        update();
+
+    }
+
+    public void update() throws IOException, InvalidDataException, UnsupportedTagException, JavaLayerException {
+        removeAll();
+        pOp = true;
+        counting = 0;
+        if (thread != null) thread.closethread();
+
+//       if(song!=null){
+//           if(thread!=null)
+//           thread.closethread();
+//           thread=new PlayerThread(song.getFilename());
+//       }
         GridBagConstraints c = new GridBagConstraints();
         setLayout(new GridBagLayout());
-        setBackground(Color.ORANGE);
+        setBackground(new Color(0x643B39));
 
-        thread = new PlayerThread();
+//        thread = new PlayerThread();
 
+        if (song != null)
+            thread = new PlayerThread(song.getFilename());
+        equalizer=new Equalize();
+        c.fill = GridBagConstraints.BOTH;
+        c.anchor = GridBagConstraints.CENTER;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.gridx = 1;
+        c.gridwidth = 3;
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 0;
+        this.add(equalizer,c);
 
         prevBtn = new JButton();
         c.fill = GridBagConstraints.BOTH;
@@ -63,7 +92,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         c.weighty = 1;
         c.gridx = 4;
         c.gridwidth = 1;
-        c.insets = new Insets(0, 300, 0, 0);
+        c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 0;
         this.add(prevBtn, c);
         showButton(prevBtn);
@@ -104,6 +133,10 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         this.add(favBtn, c);
         showButton(favBtn);
         favBtn.setIcon(new ImageIcon(getClass().getResource("emptyHeart.png")));
+        if (faved) {
+            favBtn.setIcon(new ImageIcon(getClass().getResource("redHeart.png")));
+
+        }
         favBtn.addActionListener(this);
 
 
@@ -117,6 +150,9 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         this.add(shuffleBtn, c);
         showButton(shuffleBtn);
         shuffleBtn.setIcon(new ImageIcon(getClass().getResource("shuffle.png")));
+        if (shuffled) {
+            shuffleBtn.setIcon(new ImageIcon(getClass().getResource("shuffleActivated.png")));
+        }
         shuffleBtn.addActionListener(this);
 
         repeatBtn = new JButton();
@@ -130,7 +166,9 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         showButton(repeatBtn);
         repeatBtn.setIcon(new ImageIcon(getClass().getResource("repeat.png")));
         repeatBtn.addActionListener(this);
-
+        if (repeat) {
+            repeatBtn.setContentAreaFilled(true);
+        }
 
         labelDuration = new JLabel("00:00");
         c.weightx = 1;
@@ -174,7 +212,11 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         this.add(volumeSlider, c);
 
 
-        playSlider = new JSlider();
+        if (playSlider == null)
+            playSlider = new JSlider();
+        if (thread != null)
+            playSlider.setMaximum((int) thread.getMp3().getLengthInSeconds());
+        System.out.println(playSlider.getMaximum());
         playSlider.setValue(0);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
@@ -187,12 +229,17 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         playSlider.addChangeListener(this);
 
 
+        if (timer != null && timer.isRunning())
+            timer.stop();
+        equalizer.timer.stop();
+
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if(!equalizer.timer.isRunning())equalizer.timer.start();
                 playSlider.setValue(counting);
                 counting++;
+                System.out.println(counting);
                 /*if(playSlider.getValue() == playSlider.getMaximum()){
                     thread.pause();
                     labelTimeCounter.setText("00:00");
@@ -204,66 +251,106 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                 long minutes = (long) (((double) playSlider.getValue()) / 60);
                 long seconds = (long) (((double) playSlider.getValue()) % 60);
                 labelTimeCounter.setText(String.format("%02d:%02d", minutes, seconds));
-                if(playSlider.getMaximum()==playSlider.getValue()+2){
-                    if(repeat){
+                if (thread.isFinished()) {
+                    if (repeat) {
                         try {
-                            setSong(song);
+                            update();
+                            setThreadStarts();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        } catch (UnsupportedTagException e1) {
+                            e1.printStackTrace();
+                        } catch (InvalidDataException e1) {
+                            e1.printStackTrace();
+                        } catch (JavaLayerException e1) {
+                            e1.printStackTrace();
+                        }
+                    } else {
+
+                        try {
+                            if (arrange == arranges.size() - 1) {
+                                setSong(songs.get(arranges.get(0)));
+                                arrange=0;
+                            }
+                            else {
+                                setNext();
+                            }
+                        } catch (JavaLayerException e1) {
+                            e1.printStackTrace();
                         } catch (InvalidDataException e1) {
                             e1.printStackTrace();
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         } catch (UnsupportedTagException e1) {
                             e1.printStackTrace();
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
                         }
+
                     }
-                    else{
-                        if(arrange==songs.size()-1){
-                            arrange=0;
-                            try {
-                                setNext();
-                            } catch (JavaLayerException e1) {
-                                e1.printStackTrace();
-                            } catch (UnsupportedTagException e1) {
-                                e1.printStackTrace();
-                            } catch (InvalidDataException e1) {
-                                e1.printStackTrace();
-                            } catch (IOException e1) {
-                                e1.printStackTrace();
-                            } catch (InterruptedException e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-                    }
+
+
+//                       update();
+//                       pOp=true;
+//                   } catch (IOException e1) {
+//                       e1.printStackTrace();
+//                   } catch (UnsupportedTagException e1) {
+//                       e1.printStackTrace();
+//                   } catch (JavaLayerException e1) {
+//                       e1.printStackTrace();
+//                   } catch (InvalidDataException e1) {
+//                       e1.printStackTrace();
+//                   }
+                    //                   try {
+//                       setThreadStarts();
+//                   } catch (IOException e1) {
+//                       e1.printStackTrace();
+//                   } catch (UnsupportedTagException e1) {
+//                       e1.printStackTrace();
+//                   } catch (InvalidDataException e1) {
+//                       e1.printStackTrace();
+//                   } catch (JavaLayerException e1) {
+//                       e1.printStackTrace();
+//                   }
                 }
             }
 
         });
 
 
-
+        labelDuration.setText(String.format("%02d:%02d", playSlider.getMaximum() / 60, playSlider.getMaximum() % 60));
 
     }
 
-
+    int i = 0;
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == playBtn ) {
+        if (e.getSource() == playBtn && thread != null) {
             if (pOp) {
+                playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
                 if (i == 0) {
-                    start();
+
+                    thread.start();
+                    timer.start();
+                    timer.setInitialDelay(0);
                 }
 
                 if (i == 1) {
-                    resume();
+                    thread.resumeSong();
+                    timer.setInitialDelay(0);
+                    timer.start();
                 }
 
+                pOp = false;
             } else {
-                pause();
+                playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
+                thread.pause();
+                i = 1;
+                timer.stop();
+                equalizer.timer.stop();
+
+                pOp = true;
             }
-        }  else if (e.getSource() == prevBtn && song!=null) {
+        } else if (e.getSource() == prevBtn && thread != null) {
             try {
                 setPrev();
             } catch (JavaLayerException e1) {
@@ -274,10 +361,8 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                 e1.printStackTrace();
             } catch (IOException e1) {
                 e1.printStackTrace();
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
             }
-        } else if (e.getSource() == nextBtn && song!=null) {
+        } else if (e.getSource() == nextBtn && thread != null) {
             try {
                 setNext();
             } catch (JavaLayerException e1) {
@@ -288,11 +373,9 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                 e1.printStackTrace();
             } catch (IOException e1) {
                 e1.printStackTrace();
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
             }
 
-        } else if (e.getSource() == favBtn && song!=null) {
+        } else if (e.getSource() == favBtn && thread != null) {
             if (!faved) {
                 Controller.getRepository().addSongToPL(">>Favorites", song);
                 favBtn.setIcon(new ImageIcon(getClass().getResource("redHeart.png")));
@@ -304,7 +387,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                 Controller.getRepository().removeSongFromPL(">>Favorites", song);
 
             }
-        } else if (e.getSource() == shuffleBtn && song!=null) {
+        } else if (e.getSource() == shuffleBtn && thread != null) {
             if (!shuffled) {
                 shuffleBtn.setIcon(new ImageIcon(getClass().getResource("shuffleActivated.png")));
                 shuffled = true;
@@ -316,7 +399,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
                     arranges.set(i, i);
                 }
             }
-        } else if (e.getSource() == repeatBtn && song!=null) {
+        } else if (e.getSource() == repeatBtn && thread != null) {
             if (repeat == false) {
                 repeatBtn.setContentAreaFilled(true);
                 repeat = true;
@@ -329,6 +412,7 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
         }
     }
 
+
     private void showButton(JButton b) {
         b.setBorderPainted(false);
         b.setContentAreaFilled(false);
@@ -339,121 +423,78 @@ public class PlayerGUI extends JPanel implements ActionListener, ChangeListener 
 
     }
 
-    private void start() {
-        playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
-        thread.start();
-        timer.start();
-        timer.setInitialDelay(0);
-        pOp=false;
+    public void setSong(SongInfo songInfo) throws InvalidDataException, IOException, UnsupportedTagException, JavaLayerException {
 
-    }
-    public void setSongs(ArrayList<SongInfo> songs) throws InvalidDataException, IOException, UnsupportedTagException, InterruptedException {
-        this.songs=songs;
-        arranges=new ArrayList<>();
-        for(int i=0;i<songs.size();i++){
-            arranges.add(i);
-        }
-        arrange=0;
-        setSong(songs.get(0));
-
-    }
-
-    public void setSong(SongInfo song) throws InvalidDataException, IOException, UnsupportedTagException, InterruptedException {
-        this.song=song;
-//            if(!thread.isPaused()){
-//                pause();
-//            }
-            PlayerThread.setFilepath(song.getFilename());
-//            if(!(playSlider.getValue() ==0)) {
-                seek(0,1);
-//                Thread.sleep(10);
-//                pause();
-//                resume();
-//            }
-        Controller.getWindowsGUI().getListGUI().setArtWork(song);
+        song = songInfo;
+        Controller.getWindowsGUI().getListGUI().setArtWork(songInfo);
         Controller.makeRecentlyPlayed(song);
-        if (Controller.getRepository().getLists().get(0).getSongs().contains(song)) {
+        if (Controller.getRepository().getLists().get(0).getSongs().contains(songInfo)) {
             faved = true;
         } else faved = false;
 
-
-        playSlider.setMaximum((int) thread.getMp3().getLengthInSeconds());
-        labelDuration.setText(String.format("%02d:%02d", playSlider.getMaximum() / 60, playSlider.getMaximum() % 60));
-
+//        this.songs=new ArrayList<>();
+//        this.songs.add(songInfo);
+        i = 0;
+        update();
     }
 
-    private void setNext() throws JavaLayerException, UnsupportedTagException, InvalidDataException, IOException, InterruptedException {
+    private void setNext() throws JavaLayerException, UnsupportedTagException, InvalidDataException, IOException {
         arrange++;
         arrange = arrange % arranges.size();
         setSong(songs.get(arranges.get(arrange)));
 
+        setThreadStarts();
     }
-    private void setPrev() throws JavaLayerException, UnsupportedTagException, InvalidDataException, IOException, InterruptedException {
+
+    private void setPrev() throws JavaLayerException, UnsupportedTagException, InvalidDataException, IOException {
         arrange--;
         arrange = arrange % arranges.size();
         setSong(songs.get(arranges.get(arrange)));
-    }
-    private void pause() {
-        playBtn.setIcon(new ImageIcon(getClass().getResource("play.png")));
-        thread.pause();
-        i = 1;
-        timer.stop();
-        pOp = true;
-
+        setThreadStarts();
     }
 
-    private void resume() {
-        playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
-        thread.resumeSong();
-        timer.setInitialDelay(0);
-        timer.start();
-        pOp=false;
-    }
-
-
-    private void seek(int time,int j) {
-        try {
-            thread.pause();
-            timer.stop();
-            thread.seekTo(time);
-            //playSlider.setValue(playSlider.getValue());
-            //counting = playSlider.getValue();
-            if(j==1){
-                counting=0;
-                playSlider.setValue(0);
-            }
-            else if (playSlider.getValue() < thread.getPausedPoint()) {
-                counting = playSlider.getValue();
-                playSlider.setValue(playSlider.getValue());
-            }
-
-            timer.start();
-
-
-        } catch (JavaLayerException | IOException e1) {
-            e1.printStackTrace();
+    public void setListToPlay(ArrayList<SongInfo> songs) throws JavaLayerException, UnsupportedTagException, InvalidDataException, IOException {
+        this.songs = songs;
+        arranges = new ArrayList<>();
+        arrange = 0;
+        shuffled = false;
+        for (int i = 0; i < songs.size(); i++) {
+            arranges.add(i);
         }
+
+        setSong(songs.get(arranges.get(0)));
+        setThreadStarts();
+    }
+
+    public void setThreadStarts() throws IOException, UnsupportedTagException, InvalidDataException, JavaLayerException {
+        playBtn.setIcon(new ImageIcon(getClass().getResource("pause.png")));
+        thread.start();
+        timer.start();
+        timer.setInitialDelay(0);
+        pOp = false;
+//        updateUI();
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        if (playSlider.getValueIsAdjusting()
-                && (pOp==false)) {
-            seek((int) (((double) playSlider.getValue() / playSlider.getMaximum()) * thread.getMp3().getFrameCount()),0);
-//            try {
-////                setSong(new SongInfo("C:\\Users\\heyda\\Downloads\\Telegram Desktop\\Mohsen Namjoo-Shekveh.mp3"));
-//            } catch (InvalidDataException e1) {
-//                e1.printStackTrace();
-//            } catch (IOException e1) {
-//                e1.printStackTrace();
-//            } catch (UnsupportedTagException e1) {
-//                e1.printStackTrace();
-//            } catch (InterruptedException e1) {
-//                e1.printStackTrace();
-//            }
-//            seek(0,1);
+        if (playSlider.getValueIsAdjusting() && thread != null && !thread.isPaused()) {
+            try {
+                thread.pause();
+                timer.stop();
+                equalizer.timer.stop();
+                thread.seekTo((int) (((double) playSlider.getValue() / playSlider.getMaximum()) * thread.getMp3().getFrameCount()));
+                //playSlider.setValue(playSlider.getValue());
+                //counting = playSlider.getValue();
+                if (playSlider.getValue() < thread.getPausedPoint()) {
+                    counting = playSlider.getValue();
+                    playSlider.setValue(playSlider.getValue());
+                }
+                timer.start();
 
 
+            } catch (JavaLayerException | IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }

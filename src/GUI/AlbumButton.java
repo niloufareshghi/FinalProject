@@ -31,18 +31,18 @@ public class AlbumButton extends ShapedButton {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                try {
-//                    ArrayList<SongInfo> songInfos=Controller.getRepository().getAlbum(new Albums(albumName,artist)).getSongs();
-//                    Controller.getWindowsGUI().getPlayerGUI().setListToPlay(songInfos);
-//                } catch (IOException e1) {
-//                    e1.printStackTrace();
-//                } catch (UnsupportedTagException e1) {
-//                    e1.printStackTrace();
-//                } catch (InvalidDataException e1) {
-//                    e1.printStackTrace();
-//                } catch (JavaLayerException e1) {
-//                    e1.printStackTrace();
-//                }
+                try {
+                    ArrayList<SongInfo> songInfos=Controller.getRepository().getAlbum(new Albums(albumName,artist)).getSongs();
+                    Controller.getWindowsGUI().getPlayerGUI().setListToPlay(songInfos);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedTagException e1) {
+                    e1.printStackTrace();
+                } catch (InvalidDataException e1) {
+                    e1.printStackTrace();
+                } catch (JavaLayerException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
     }
