@@ -1,6 +1,8 @@
 package GUI;
 
+import Controller.Controller;
 import Logic.Albums;
+import Logic.LyricFinder;
 import Logic.PlayList;
 import Logic.SongInfo;
 
@@ -8,6 +10,7 @@ import javax.sound.sampled.LineListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.dnd.Autoscroll;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -38,7 +41,19 @@ public class MainGUI extends JScrollPane {
         verticalListed.setLayout(myGrid);
     }
 
+    public void Lyric(SongInfo song) throws IOException {
+        String artist=song.getArtist();
+        String title=song.getTitle();
+        JLabel showLyric=new JLabel();
+        String lyric=LyricFinder.getURLSource(artist,title);
+//        String lyric=LyricFinder.getURLSource("saxon","747strangersinthenight");
 
+        showLyric.setSize(350,350);
+        showLyric.setText(lyric);
+        JPanel moreOption=new JPanel();
+        moreOption.add(showLyric);
+        setViewportView(moreOption);
+    }
     public void setSongsList(ArrayList<SongInfo> songInfos) {
         setList();
         songs=songInfos;
