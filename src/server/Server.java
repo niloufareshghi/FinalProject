@@ -22,15 +22,7 @@ public class Server {
         listener.start();
     }
 
-    public static void main(String[] args) throws InvalidDataException, IOException, UnsupportedTagException {
-        PlayList playList = new PlayList("hey");
-        SongInfo song1 = new SongInfo("C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\11460851_11460513.mp3");
-        playList.addSongs(song1);
-        SongInfo song2 = new SongInfo("C:\\Users\\Niloufar Eshghi\\Downloads\\Telegram Desktop\\Bodo Dire.mp3");
-        playList.addSongs(song2);
 
-        Server server= new Server(playList);
-     }
 }
 
 
@@ -89,7 +81,7 @@ class ClientHandler extends Thread {
         printWriter.println(playList.getSongs().size());
 
         for (SongInfo song : playList.getSongs()) {
-            printWriter.println(song.getTitle());
+            printWriter.println(song.getFilename());
         }
 
     }

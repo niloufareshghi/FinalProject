@@ -7,6 +7,7 @@ import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 public class FileClient {
 
@@ -14,12 +15,14 @@ public class FileClient {
     private DataInputStream inputStream;
     private PrintWriter out;
     int id;
+    SongInfo song;
 
-    public FileClient(String address , int port){
+    public FileClient(String address , int port, SongInfo song){
         try{
             socket = new Socket(address,port);
             inputStream = new DataInputStream(socket.getInputStream());
             out = new PrintWriter(socket.getOutputStream());
+            this.song = song;
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -30,12 +33,15 @@ public class FileClient {
 
     public void download() throws InvalidDataException, IOException, UnsupportedTagException {
 
-        String path = "C:\\Users\\Niloufar Eshghi\\Desktop\\newS";
-        path += ".mp3";
+
+        double random = Math.random() * 49 + 1;
+
+
+        out.println(song.getFilename());
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(path);
+            fos = new FileOutputStream("JpotifyMusics/"+random+".mp3");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -48,7 +54,7 @@ public class FileClient {
     }
 
     public static void main(String[] args) throws InvalidDataException, IOException, UnsupportedTagException {
-        FileClient client = new FileClient("localhost",5058);
-        client.download();
+        //FileClient client = new FileClient(S"localhost",5058);
+       // client.download();
     }
 }
